@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/hello")
-@CrossOrigin(origins = {"http://localhost:8081", "https://customanager.netlify.app"})
+@CrossOrigin(origins = {"http://localhost:8081/", "https://customanager.netlify.app"})
 public class HelloController {
 
 	@GetMapping("")
