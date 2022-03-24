@@ -1,4 +1,4 @@
-package com.customanagerapi.controllers;
+package com.customanagerapi.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
