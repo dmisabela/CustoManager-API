@@ -2,6 +2,8 @@ package com.customanagerapi.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.customanagerapi.model.User;
+import com.customanagerapi.entity.User;
 import com.customanagerapi.repository.UserRepository;
 
 @RestController
@@ -35,7 +37,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/register")
-	public User insertUser(@RequestBody User user) {
+	public User insertUser(@RequestBody @Valid User user) {
 		return userRepository.save(user);
 	}
 	
