@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.customanagerapi.JwtService;
 import com.customanagerapi.entity.Usuario;
 import com.customanagerapi.service.impl.UsuarioServiceImpl;
 
@@ -36,6 +36,12 @@ public class UsuarioController {
 	public Usuario insertUser(@RequestBody @Valid Usuario usuario) {
 		String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
 		usuario.setSenha(senhaCriptografada);
+		
+		//Teste de geração do token
+		JwtService jwt = new JwtService();
+		String token = jwt.gerarToken(usuario);		
+		System.out.println(token);
+		
 		return usuarioService.salvar(usuario);
 	}
 	
