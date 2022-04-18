@@ -13,6 +13,7 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.br.CPF;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,8 +21,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "USUARIOS")
-public class User implements Serializable {
+public class Usuario implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 		
@@ -41,7 +43,7 @@ public class User implements Serializable {
 		
 	@Column(name = "email", length = 100)
 	@NotEmpty(message = "{campo.obrigatorio.email}")
-	private String email;	
+	private String login;	
 	
 	@Column(name = "telefone", length = 15)
 	@NotEmpty(message = "{campo.obrigatorio.telefone}")
