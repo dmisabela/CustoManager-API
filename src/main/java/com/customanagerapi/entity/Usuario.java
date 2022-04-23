@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.br.CPF;
@@ -63,8 +64,8 @@ public class Usuario implements Serializable {
 	@Column (name = "funcionario")
 	private boolean funcionario;
 	
-	@Column (name = "status")
-	private boolean status;
+	@Column (name = "external")
+	private boolean external;
 	
 	@Column (name = "acesso_sistema")
 	private boolean acessoAoSistema;

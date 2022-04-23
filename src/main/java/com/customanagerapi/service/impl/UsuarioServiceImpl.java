@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +24,16 @@ public class UsuarioServiceImpl implements UserDetailsService {
 	private UsuarioRepository repository;
 	
 	@Transactional
-	public Usuario salvar(Usuario usuario) {
+	public Usuario salvar(Usuario usuario) throws Exception {
+		
+		if(repository.existsByCpf(usuario.getCpf())) {
+			throw new Exception("CPF já cadastrado");
+		}
+		
+		if (repository.existsByLogin(usuario.getLogin())) {
+			throw new Exception("E-mail já cadastrado");
+		}
+		
 		return repository.save(usuario);
 	}	
 	

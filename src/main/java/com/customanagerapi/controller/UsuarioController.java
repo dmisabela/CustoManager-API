@@ -33,7 +33,7 @@ public class UsuarioController {
 	
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Usuario insertUser(@RequestBody @Valid Usuario usuario) {
+	public Usuario insertUser(@RequestBody @Valid Usuario usuario) throws Exception {
 		String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
 		usuario.setSenha(senhaCriptografada);
 		
