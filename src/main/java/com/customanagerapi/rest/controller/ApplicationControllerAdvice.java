@@ -28,6 +28,13 @@ public class ApplicationControllerAdvice {
 		
 	}	
 	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(Exception.class)
+	public ApiErrors handleExceptions (Exception ex) {
+		String errors = ex.getMessage();		
+		return new ApiErrors(errors);
+	}
+	
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	@ExceptionHandler(UsuarioOuSenhaInvalidaException.class)
 	public ApiErrors handleUsuarioOuSenhaInvalidaException (UsuarioOuSenhaInvalidaException ex) {
