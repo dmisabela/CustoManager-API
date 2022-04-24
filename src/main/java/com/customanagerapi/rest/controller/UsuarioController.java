@@ -24,6 +24,7 @@ import com.customanagerapi.rest.dto.TokenDTO;
 import com.customanagerapi.security.jwt.JwtService;
 import com.customanagerapi.service.impl.UsuarioServiceImpl;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -38,6 +39,7 @@ public class UsuarioController {
 	
 	
 	@PostMapping("/login")
+	@ApiOperation("Autenticação de usuário")
 	public TokenDTO autenticar(@RequestBody CredenciaisDTO credenciais) {		
 		try {	
 			Usuario usuario = Usuario.builder()
@@ -57,6 +59,7 @@ public class UsuarioController {
 	
 	
 	@PostMapping("/register")
+	@ApiOperation("Cadastro de usuário")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Usuario insertUser(@RequestBody @Valid Usuario usuario) throws Exception {
 		String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
@@ -65,17 +68,20 @@ public class UsuarioController {
 	}
 	
 	@GetMapping("/get-all")
+	@ApiOperation("Obter todos os usuários")
 	public List<Usuario> getAllUsers() {
 		return usuarioService.getAllUsers();
 	}
 	
 	@GetMapping("/get-by-id/{id}") 
+	@ApiOperation("Obter detalhes de um usuário pelo ID")
 	public Usuario getUserById(@PathVariable("id") long id) {
 		return usuarioService.getUserById(id);
 	}
 	
 	
 	@PutMapping("/update")
+	@ApiOperation("Alterar usuário")
 	public Usuario updateUser(@RequestBody @Valid Usuario usuario) throws Exception {
 		String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
 		usuario.setSenha(senhaCriptografada);	
