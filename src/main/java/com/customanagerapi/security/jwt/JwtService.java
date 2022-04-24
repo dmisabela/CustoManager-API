@@ -1,4 +1,4 @@
-package com.customanagerapi;
+package com.customanagerapi.security.jwt;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.customanagerapi.entity.Usuario;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -26,7 +28,6 @@ public class JwtService {
 	Date data = Date.from(instant);		
 	
 	HashMap<String, Object> claims = new HashMap<>();
-	claims.put("e-mail", usuario.getLogin());
 	claims.put("external", usuario.isExternal());
 	claims.put("admin", usuario.isAdmin());
 	claims.put("funcionario", usuario.isFuncionario());
@@ -34,13 +35,42 @@ public class JwtService {
 	
 	return Jwts
 				.builder()
+				.setClaims(claims)
 				.setSubject(usuario.getLogin())
 				.setExpiration(data)
-				.setClaims(claims)
 				.signWith( SignatureAlgorithm.HS512, chaveAssinatura )
 				.compact();		
 				
-	} 	
+	} 		
 	
+	private Claims obterClaims (String token) throws ExpiredJwtException {		
+		return Jwts
+					.parser()
+					.setSigningKey(chaveAssinatura)
+					.parseClaimsJws(token)
+					.getBody();
+		
+	}
+	
+	public boolean tokenValido (String token) {
+		try {
+			Claims claims = obterClaims(token);
+			Date dataExpiracao = claims.getExpiration();			
+			LocalDateTime data = dataExpiracao.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+						
+			return !LocalDateTime.now().isAfter(data);
+			
+		}
+		
+		catch (Exception e) {
+			return false;
+		}
+		
+	}
+	
+	
+	public String obterLoginUsuario(String token) throws ExpiredJwtException {		
+		return (String) obterClaims(token).getSubject();		
+	}
 
 }

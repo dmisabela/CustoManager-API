@@ -1,10 +1,11 @@
-package com.customanagerapi.controller;
+package com.customanagerapi.rest.controller;
 
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.customanagerapi.JwtService;
 import com.customanagerapi.entity.Usuario;
+import com.customanagerapi.exception.UsuarioOuSenhaInvalidaException;
+import com.customanagerapi.rest.dto.CredenciaisDTO;
+import com.customanagerapi.rest.dto.TokenDTO;
+import com.customanagerapi.security.jwt.JwtService;
 import com.customanagerapi.service.impl.UsuarioServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -30,18 +34,33 @@ public class UsuarioController {
 	
 	private final UsuarioServiceImpl usuarioService;
 	private final PasswordEncoder passwordEncoder;
+	private final JwtService jwtService;
+	
+	
+	@PostMapping("/login")
+	public TokenDTO autenticar(@RequestBody CredenciaisDTO credenciais) {		
+		try {	
+			Usuario usuario = Usuario.builder()
+					.login(credenciais.getLogin())
+					.senha(credenciais.getSenha())
+					.build();			
+						
+			UserDetails usuarioAutenticado = usuarioService.autenticar(usuario);	
+			
+			String token = jwtService.gerarToken(usuario);				
+			return new TokenDTO(usuarioAutenticado.getUsername(), token);			
+		}		
+		catch (UsuarioOuSenhaInvalidaException e) {			
+			throw new UsuarioOuSenhaInvalidaException();
+		}
+	}
+	
 	
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Usuario insertUser(@RequestBody @Valid Usuario usuario) throws Exception {
 		String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
-		usuario.setSenha(senhaCriptografada);
-		
-		//Teste de geração do token
-		JwtService jwt = new JwtService();
-		String token = jwt.gerarToken(usuario);		
-		System.out.println(token);
-		
+		usuario.setSenha(senhaCriptografada);			
 		return usuarioService.salvar(usuario);
 	}
 	
@@ -57,7 +76,9 @@ public class UsuarioController {
 	
 	
 	@PutMapping("/update")
-	public Usuario updateUser(@RequestBody @Valid Usuario usuario) {
+	public Usuario updateUser(@RequestBody @Valid Usuario usuario) throws Exception {
+		String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
+		usuario.setSenha(senhaCriptografada);	
 		return usuarioService.update(usuario);
 	}
 	

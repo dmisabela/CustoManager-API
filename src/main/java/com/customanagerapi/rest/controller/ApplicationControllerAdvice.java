@@ -1,4 +1,4 @@
-package com.customanagerapi.controller;
+package com.customanagerapi.rest.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,8 +8,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.customanagerapi.entity.ApiErrors;
+import com.customanagerapi.exception.UsuarioOuSenhaInvalidaException;
 
 @RestControllerAdvice
 public class ApplicationControllerAdvice {
@@ -24,17 +26,13 @@ public class ApplicationControllerAdvice {
 		
 		return new ApiErrors(errors);
 		
-	}
+	}	
 	
-	
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(Exception.class)
-	public ApiErrors handleExceptions (Exception ex) {
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(UsuarioOuSenhaInvalidaException.class)
+	public ApiErrors handleUsuarioOuSenhaInvalidaException (UsuarioOuSenhaInvalidaException ex) {
 		String errors = ex.getMessage();		
 		return new ApiErrors(errors);
 	}
-	
-	
-	
 
 }
