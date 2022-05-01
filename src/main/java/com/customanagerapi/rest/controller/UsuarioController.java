@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +33,6 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioController {
 	
 	private final UsuarioServiceImpl usuarioService;
-	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
 	
 	
@@ -61,9 +59,7 @@ public class UsuarioController {
 	@PostMapping("/register")
 	@ApiOperation("Cadastro de usuário")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Usuario insertUser(@RequestBody @Valid Usuario usuario) throws Exception {
-		String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
-		usuario.setSenha(senhaCriptografada);			
+	public Usuario insertUser(@RequestBody @Valid Usuario usuario) throws Exception {		
 		return usuarioService.salvar(usuario);
 	}
 	
@@ -83,8 +79,6 @@ public class UsuarioController {
 	@PutMapping("/update")
 	@ApiOperation("Alterar usuário")
 	public Usuario updateUser(@RequestBody @Valid Usuario usuario) throws Exception {
-		String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
-		usuario.setSenha(senhaCriptografada);	
 		return usuarioService.update(usuario);
 	}
 	

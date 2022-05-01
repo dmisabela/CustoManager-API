@@ -1,6 +1,8 @@
 package com.customanagerapi.entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,8 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -41,8 +45,14 @@ public class Usuario implements Serializable {
 	@NotEmpty(message = "{campo.obrigatorio.cpf}")
 	@CPF(message = "{campo.valido.cpf}")
 	private String cpf;
+	
+	@Column(name = "data_nascimento", length = 10)
+	@NotNull(message = "{campo.obrigatorio.data_nasc}")
+	@Past(message = "{campo.valido.data_nasc}")
+	private LocalDate dataNascimento;	
 		
 	@Column(name = "email", length = 100)
+	@Email(message = "{campo.valido.email}")
 	@NotEmpty(message = "{campo.obrigatorio.email}")
 	private String login;	
 	
@@ -69,5 +79,9 @@ public class Usuario implements Serializable {
 	
 	@Column (name = "acesso_sistema")
 	private boolean acessoAoSistema;
+	
+	@Column (name = "data_criacao")
+	private LocalDateTime dataCriacao;
+
 	
 }

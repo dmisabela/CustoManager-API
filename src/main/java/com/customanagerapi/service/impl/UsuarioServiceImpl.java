@@ -1,6 +1,6 @@
 package com.customanagerapi.service.impl;
 
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +34,10 @@ public class UsuarioServiceImpl implements UserDetailsService {
 		if (repository.existsByLogin(usuario.getLogin())) {
 			throw new Exception("E-mail já cadastrado");
 		}
+		
+		String senhaCriptografada = encoder.encode(usuario.getSenha());
+		usuario.setSenha(senhaCriptografada);	
+		usuario.setDataCriacao(LocalDateTime.now());
 	
 		
 		return repository.save(usuario);
@@ -52,6 +56,8 @@ public class UsuarioServiceImpl implements UserDetailsService {
 	
 	@Transactional
 	public Usuario update(Usuario usuario) {
+		String senhaCriptografada = encoder.encode(usuario.getSenha());
+		usuario.setSenha(senhaCriptografada);	
 		return repository.save(usuario);
 	}
 	
