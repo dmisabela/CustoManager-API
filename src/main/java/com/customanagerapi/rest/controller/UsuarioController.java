@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -98,10 +99,10 @@ public class UsuarioController {
 	}
 	
 		
-//	@DeleteMapping("/delete/{id}")
-//	public Usuario deleteUser(@PathVariable("id") long id) {
-//		return usuarioService.delete(id);
-//	}
+	@DeleteMapping("/delete/{id}")
+	public void deleteUser(@PathVariable("id") Long id) {
+		usuarioService.delete(id);
+	}
 	
 	
 }

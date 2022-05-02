@@ -83,12 +83,10 @@ public class UsuarioServiceImpl implements UserDetailsService {
 		return repository.save(usuario);
 	}
 	
-	//TODO: implementar delete
-	
-//	@Transactional
-//	public Usuario delete(long id) { 
-//		return repository.deleteUser(id);
-//	}
+	@Transactional
+	public void delete(Long id) { 
+		repository.deleteById(id);
+	}
 	
 	
 	public UserDetails autenticar(Usuario usuario) throws UsuarioOuSenhaInvalidaException {		
