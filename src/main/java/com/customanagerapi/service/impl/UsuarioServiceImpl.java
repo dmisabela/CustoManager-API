@@ -4,6 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -44,8 +49,23 @@ public class UsuarioServiceImpl implements UserDetailsService {
 	}	
 	
 	@Transactional
-	public List<Usuario> getAllUsers() {
-		return repository.findAll();
+	public Page<Usuario> getAllUsers(
+//			Integer id,
+//			String nome,
+//			String login,
+//			String cpf,
+//			String telefone,
+//			Boolean admin,
+			String orderBy, 
+			Integer pageNumber, 
+			Integer pageSize) {
+		
+		
+		
+		Sort sort = Sort.by(orderBy);
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+		
+		return repository.findAll(pageable);
 	} 
 	
 	@Transactional

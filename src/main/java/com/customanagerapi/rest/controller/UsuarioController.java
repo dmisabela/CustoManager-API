@@ -1,9 +1,8 @@
 package com.customanagerapi.rest.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -65,8 +64,20 @@ public class UsuarioController {
 	
 	@GetMapping("/get-all")
 	@ApiOperation("Obter todos os usuários")
-	public List<Usuario> getAllUsers() {
-		return usuarioService.getAllUsers();
+	public Page<Usuario> getAllUsers(
+//			Integer id,
+//			String nome,
+//			String login,
+//			String cpf,
+//			String telefone,
+//			Boolean admin,
+			String orderBy, 
+			Integer pageNumber, 
+			Integer pageSize) {
+		
+		
+		return usuarioService.getAllUsers(orderBy, pageNumber, pageSize);
+		//return usuarioService.getAllUsers(id, nome, login, cpf, telefone, admin, orderBy, pageNumber, pageSize);
 	}
 	
 	@GetMapping("/get-by-id/{id}") 
@@ -87,5 +98,6 @@ public class UsuarioController {
 //	public Usuario deleteUser(@PathVariable("id") long id) {
 //		return usuarioService.delete(id);
 //	}
+	
 	
 }
