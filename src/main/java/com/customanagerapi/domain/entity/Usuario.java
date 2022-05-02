@@ -1,4 +1,4 @@
-package com.customanagerapi.entity;
+package com.customanagerapi.domain.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;

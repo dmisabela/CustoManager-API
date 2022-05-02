@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.customanagerapi.entity.utils.ApiErrors;
+import com.customanagerapi.domain.utils.ApiErrors;
 import com.customanagerapi.exception.EmailException;
 import com.customanagerapi.exception.UsuarioOuSenhaInvalidaException;
 

@@ -1,4 +1,4 @@
-package com.customanagerapi.entity.utils;
+package com.customanagerapi.domain.utils;
 
 import java.util.Arrays;
 import lombok.Getter;

@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import org.springframework.stereotype.Service;
 
-import com.customanagerapi.entity.Usuario;
+import com.customanagerapi.domain.entity.Usuario;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -18,7 +18,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class JwtService {	
 	
-	private long expiracaoMinutos = 30;
+	private long expiracaoMinutos = 120;
 	private String chaveAssinatura = "Q3VzdG9NYW5hZ2VyQVBJLVRva2Vu";
 	
 	public String gerarToken (Usuario usuario) {		
@@ -28,6 +28,7 @@ public class JwtService {
 	Date data = Date.from(instant);		
 	
 	HashMap<String, Object> claims = new HashMap<>();
+	claims.put("id", usuario.getId());
 	claims.put("external", usuario.isExternal());
 	claims.put("admin", usuario.isAdmin());
 	claims.put("funcionario", usuario.isFuncionario());

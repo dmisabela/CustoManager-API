@@ -1,5 +1,7 @@
 package com.customanagerapi.rest.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.customanagerapi.entity.Usuario;
+
+import com.customanagerapi.domain.entity.Usuario;
+import com.customanagerapi.domain.utils.SearchRequest;
 import com.customanagerapi.exception.UsuarioOuSenhaInvalidaException;
 import com.customanagerapi.rest.dto.CredenciaisDTO;
 import com.customanagerapi.rest.dto.TokenDTO;
@@ -46,7 +50,7 @@ public class UsuarioController {
 						
 			UserDetails usuarioAutenticado = usuarioService.autenticar(usuario);	
 			
-			String token = jwtService.gerarToken(usuario);				
+			String token = "Bearer " + jwtService.gerarToken(usuario);				
 			return new TokenDTO(usuarioAutenticado.getUsername(), token);			
 		}		
 		catch (UsuarioOuSenhaInvalidaException e) {			
@@ -65,20 +69,20 @@ public class UsuarioController {
 	@GetMapping("/get-all")
 	@ApiOperation("Obter todos os usuários")
 	public Page<Usuario> getAllUsers(
-//			Integer id,
-//			String nome,
-//			String login,
-//			String cpf,
-//			String telefone,
-//			Boolean admin,
 			String orderBy, 
 			Integer pageNumber, 
-			Integer pageSize) {
-		
+			Integer pageSize) {		
 		
 		return usuarioService.getAllUsers(orderBy, pageNumber, pageSize);
-		//return usuarioService.getAllUsers(id, nome, login, cpf, telefone, admin, orderBy, pageNumber, pageSize);
 	}
+	
+	
+    @PostMapping("/search")
+    @ApiOperation("Pesquisar usuário(s) por filtros")
+    public List<Usuario> search(@RequestBody SearchRequest request) {
+        return usuarioService.searchUsuarios(request);
+    }
+
 	
 	@GetMapping("/get-by-id/{id}") 
 	@ApiOperation("Obter detalhes de um usuário pelo ID")

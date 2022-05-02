@@ -15,7 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.customanagerapi.entity.Usuario;
+import com.customanagerapi.domain.entity.Usuario;
+import com.customanagerapi.domain.utils.SearchRequest;
+import com.customanagerapi.domain.utils.SearchSpecification;
 import com.customanagerapi.exception.UsuarioOuSenhaInvalidaException;
 import com.customanagerapi.repository.UsuarioRepository;
 
@@ -48,18 +50,18 @@ public class UsuarioServiceImpl implements UserDetailsService {
 		return repository.save(usuario);
 	}	
 	
+	
+    public List<Usuario> searchUsuarios(SearchRequest request) {
+        SearchSpecification<Usuario> specification = new SearchSpecification<>(request);
+        return repository.findAll(specification);
+    }
+
+	
 	@Transactional
 	public Page<Usuario> getAllUsers(
-//			Integer id,
-//			String nome,
-//			String login,
-//			String cpf,
-//			String telefone,
-//			Boolean admin,
 			String orderBy, 
 			Integer pageNumber, 
-			Integer pageSize) {
-		
+			Integer pageSize) {	
 		
 		
 		Sort sort = Sort.by(orderBy);
@@ -99,6 +101,7 @@ public class UsuarioServiceImpl implements UserDetailsService {
 			Usuario verifyClaims = repository.findByLogin(usuario.getLogin())
 									.orElseThrow(() -> new UsuarioOuSenhaInvalidaException());
 			
+			usuario.setId(verifyClaims.getId());
 			usuario.setAdmin(verifyClaims.isAdmin());
 			usuario.setAcessoAoSistema(verifyClaims.isAcessoAoSistema());
 			usuario.setExternal(verifyClaims.isExternal());
