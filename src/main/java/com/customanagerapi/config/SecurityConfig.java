@@ -16,14 +16,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.customanagerapi.security.jwt.JwtAuthFilter;
 import com.customanagerapi.security.jwt.JwtService;
-import com.customanagerapi.service.impl.UsuarioServiceImpl;
+import com.customanagerapi.service.UsuarioService;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	@Lazy
-	private UsuarioServiceImpl usuarioService;
+	private UsuarioService usuarioService;
 	
 	@Autowired
 	@Lazy

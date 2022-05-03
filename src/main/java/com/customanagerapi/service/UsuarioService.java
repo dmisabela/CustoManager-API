@@ -1,4 +1,4 @@
-package com.customanagerapi.service.impl;
+package com.customanagerapi.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,7 +22,7 @@ import com.customanagerapi.exception.UsuarioOuSenhaInvalidaException;
 import com.customanagerapi.repository.UsuarioRepository;
 
 @Service
-public class UsuarioServiceImpl implements UserDetailsService {	
+public class UsuarioService implements UserDetailsService {	
 	
 	@Autowired
 	private PasswordEncoder encoder;

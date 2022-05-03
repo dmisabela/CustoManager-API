@@ -25,7 +25,7 @@ import com.customanagerapi.exception.UsuarioOuSenhaInvalidaException;
 import com.customanagerapi.rest.dto.CredenciaisDTO;
 import com.customanagerapi.rest.dto.TokenDTO;
 import com.customanagerapi.security.jwt.JwtService;
-import com.customanagerapi.service.impl.UsuarioServiceImpl;
+import com.customanagerapi.service.UsuarioService;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = {"http://localhost:8080", "https://customanager.netlify.app"})
 public class UsuarioController {
 	
-	private final UsuarioServiceImpl usuarioService;
+	private final UsuarioService usuarioService;
 	private final JwtService jwtService;
 	
 	

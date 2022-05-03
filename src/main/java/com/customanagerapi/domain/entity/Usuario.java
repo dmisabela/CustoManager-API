@@ -3,13 +3,17 @@ package com.customanagerapi.domain.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -18,9 +22,12 @@ import javax.validation.constraints.Past;
 
 import org.hibernate.validator.constraints.br.CPF;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -36,7 +43,7 @@ public class Usuario implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
-	private long id;
+	protected long id;
 	
 	@Column(name = "nome", length = 100)
 	@NotEmpty(message = "{campo.obrigatorio.nome}")
@@ -78,5 +85,10 @@ public class Usuario implements Serializable {
 	@Lob
 	@Column(name = "foto_perfil")
 	private byte[] fotoPerfil;
+	
+	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+	@JsonManagedReference
+    private Set<Empresa> empresa;
 	
 }
