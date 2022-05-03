@@ -95,16 +95,13 @@ public class UsuarioServiceImpl implements UserDetailsService {
 		
 		boolean senhaCorreta = encoder.matches(usuario.getSenha(), user.getPassword());
 		
+		
 		if(senhaCorreta) {			
 			Usuario verifyClaims = repository.findByLogin(usuario.getLogin())
 									.orElseThrow(() -> new UsuarioOuSenhaInvalidaException());
 			
 			usuario.setId(verifyClaims.getId());
-			usuario.setAdmin(verifyClaims.isAdmin());
-			usuario.setAcessoAoSistema(verifyClaims.isAcessoAoSistema());
-			usuario.setExternal(verifyClaims.isExternal());
-			usuario.setFuncionario(verifyClaims.isFuncionario());			
-			
+			usuario.setAdmin(verifyClaims.isAdmin());		
 			return user;
 		}
 		

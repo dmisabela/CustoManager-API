@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -71,17 +72,11 @@ public class Usuario implements Serializable {
 	@Column (name = "admin")
 	private boolean admin;
 	
-	@Column (name = "funcionario")
-	private boolean funcionario;
-	
-	@Column (name = "external")
-	private boolean external;
-	
-	@Column (name = "acesso_sistema")
-	private boolean acessoAoSistema;
-	
 	@Column (name = "data_criacao")
 	private LocalDateTime dataCriacao;
 
+	@Lob
+	@Column(name = "foto_perfil")
+	private byte[] fotoPerfil;
 	
 }
