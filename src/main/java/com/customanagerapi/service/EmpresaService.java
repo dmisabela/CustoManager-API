@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.h2.util.json.JSONArray;
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,9 +13,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.customanagerapi.domain.entity.Empresa;
 import com.customanagerapi.domain.entity.Usuario;
+import com.customanagerapi.domain.utils.SearchRequest;
+import com.customanagerapi.domain.utils.SearchSpecification;
 import com.customanagerapi.exception.RegraNegocioException;
 import com.customanagerapi.repository.EmpresaRepository;
 import com.customanagerapi.repository.UsuarioRepository;
@@ -54,15 +58,25 @@ public class EmpresaService {
 	@Transactional
 	public Page<Empresa> getAllEmpresas(
 			String orderBy, 
+			Boolean orderAsc,
 			Integer pageNumber, 
 			Integer pageSize) {	
 		
 		
-		Sort sort = Sort.by(orderBy);
+		Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 		
 		return empresaRepository.findAll(pageable);
 	} 
+	
+	public Page<Empresa> searchEmpresas(SearchRequest request, String orderBy, 
+    		Boolean orderAsc, Integer pageNumber, Integer pageSize) {
+        SearchSpecification<Empresa> specification = new SearchSpecification<>(request);
+        Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+	        
+        return empresaRepository.findAll(specification, pageable);
+    }
 	
 	
 	@Transactional
@@ -71,8 +85,22 @@ public class EmpresaService {
 	}
 	
 	@Transactional
-	public List<Empresa> getEmpresaByUserId(Usuario usuario) {
-		return empresaRepository.findByUsuario(usuario);
+	public List<Empresa> getEmpresaByUserId(@PathVariable long id) {
+		
+		Usuario user = usuarioRepository.findById(id);
+		
+		return empresaRepository.findByUsuario(user);
+	}
+	
+	
+	@Transactional
+	public Empresa update(Empresa empresa) {
+		return empresaRepository.save(empresa);
+	}
+	
+	@Transactional
+	public void delete(Long id) { 
+		empresaRepository.deleteById(id);
 	}
 
 }

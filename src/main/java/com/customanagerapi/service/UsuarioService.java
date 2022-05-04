@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.customanagerapi.domain.entity.Usuario;
 import com.customanagerapi.domain.utils.SearchRequest;
 import com.customanagerapi.domain.utils.SearchSpecification;
+import com.customanagerapi.exception.RegraNegocioException;
 import com.customanagerapi.exception.UsuarioOuSenhaInvalidaException;
 import com.customanagerapi.repository.UsuarioRepository;
 
@@ -32,14 +33,14 @@ public class UsuarioService implements UserDetailsService {
 	private UsuarioRepository repository;
 	
 	@Transactional
-	public Usuario salvar(Usuario usuario) throws Exception {	
+	public Usuario salvar(Usuario usuario) throws RegraNegocioException {	
 		
 		if(repository.existsByCpf(usuario.getCpf())) {
-			throw new Exception("CPF já cadastrado");
+			throw new RegraNegocioException("CPF já cadastrado");
 		}
 		
 		if (repository.existsByLogin(usuario.getLogin())) {
-			throw new Exception("E-mail já cadastrado");
+			throw new RegraNegocioException("E-mail já cadastrado");
 		}
 		
 		String senhaCriptografada = encoder.encode(usuario.getSenha());

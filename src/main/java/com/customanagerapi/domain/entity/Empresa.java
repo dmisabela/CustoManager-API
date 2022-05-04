@@ -14,9 +14,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.br.CNPJ;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -58,7 +61,7 @@ public class Empresa implements Serializable {
 	@Column (name = "data_criacao")
 	private LocalDateTime dataCriacao;	
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false, targetEntity = Usuario.class)	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false, targetEntity = Usuario.class)
 	@JoinColumn(name = "id_usuario_criador", nullable = false)
 	@JsonBackReference
 	private Usuario usuario;

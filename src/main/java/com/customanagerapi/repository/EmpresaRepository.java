@@ -9,14 +9,11 @@ import com.customanagerapi.domain.entity.Empresa;
 import com.customanagerapi.domain.entity.Usuario;
 
 public interface EmpresaRepository extends JpaRepository<Empresa, Long>,
-										   JpaSpecificationExecutor<Usuario> {
+										   JpaSpecificationExecutor<Empresa> {
 	
 	List<Empresa> findByUsuario(Usuario usuario);
 	
 	Boolean existsByCnpj(String cnpj);
-	
-		
-	
 	
 	
 }	
