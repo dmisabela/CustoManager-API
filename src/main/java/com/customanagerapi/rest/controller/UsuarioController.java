@@ -71,17 +71,19 @@ public class UsuarioController {
 	@ApiOperation("Obter todos os usuários")
 	public Page<Usuario> getAllUsers(
 			String orderBy, 
+			Boolean orderAsc,
 			Integer pageNumber, 
 			Integer pageSize) {		
 		
-		return usuarioService.getAllUsers(orderBy, pageNumber, pageSize);
+		return usuarioService.getAllUsers(orderBy, orderAsc, pageNumber, pageSize);
 	}
 	
 	
     @PostMapping("/search")
     @ApiOperation("Pesquisar usuário(s) por filtros")
-    public List<Usuario> search(@RequestBody SearchRequest request) {
-        return usuarioService.searchUsuarios(request);
+    public Page<Usuario> search(@RequestBody SearchRequest request,
+    					String orderBy, Boolean orderAsc, Integer pageNumber, Integer pageSize ) {
+        return usuarioService.searchUsuarios(request, orderBy, orderAsc, pageNumber, pageSize);
     }
 
 	

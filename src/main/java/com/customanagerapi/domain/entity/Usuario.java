@@ -12,7 +12,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -20,6 +19,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -36,6 +36,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "USUARIOS")
+@EqualsAndHashCode(exclude = "empresa")
 public class Usuario implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -82,9 +83,9 @@ public class Usuario implements Serializable {
 	@Column (name = "data_criacao")
 	private LocalDateTime dataCriacao;
 
-	@Lob
-	@Column(name = "foto_perfil")
-	private byte[] fotoPerfil;
+//	@Type(type="org.hibernate.type.BinaryType")
+//	@Column(name = "foto_perfil")
+//	private byte[] fotoPerfil;
 	
 	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)

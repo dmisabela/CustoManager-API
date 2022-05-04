@@ -51,20 +51,24 @@ public class UsuarioService implements UserDetailsService {
 	}	
 	
 	
-    public List<Usuario> searchUsuarios(SearchRequest request) {
+    public Page<Usuario> searchUsuarios(SearchRequest request, String orderBy, 
+    		Boolean orderAsc, Integer pageNumber, Integer pageSize) {
         SearchSpecification<Usuario> specification = new SearchSpecification<>(request);
-        return repository.findAll(specification);
+        Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        
+        return repository.findAll(specification, pageable);
     }
 
 	
 	@Transactional
 	public Page<Usuario> getAllUsers(
 			String orderBy, 
+			Boolean orderAsc,
 			Integer pageNumber, 
 			Integer pageSize) {	
 		
-		
-		Sort sort = Sort.by(orderBy);
+		Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 		
 		return repository.findAll(pageable);
