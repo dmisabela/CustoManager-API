@@ -92,4 +92,7 @@ public class Usuario implements Serializable {
 	@JsonManagedReference
     private Set<Empresa> empresa;
 	
+	@OneToMany(mappedBy = "usuarioFuncionario")
+    Set<VinculoAssociadoEmpresa> vinculos;
+	
 }
