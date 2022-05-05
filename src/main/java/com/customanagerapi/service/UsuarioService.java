@@ -2,6 +2,7 @@ package com.customanagerapi.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.customanagerapi.domain.entity.Usuario;
 import com.customanagerapi.domain.utils.SearchRequest;
 import com.customanagerapi.domain.utils.SearchSpecification;
+import com.customanagerapi.exception.RegistroNaoEncontradoException;
 import com.customanagerapi.exception.RegraNegocioException;
 import com.customanagerapi.exception.UsuarioOuSenhaInvalidaException;
 import com.customanagerapi.repository.UsuarioRepository;
@@ -78,6 +80,18 @@ public class UsuarioService implements UserDetailsService {
 	@Transactional
 	public Usuario getUserById(long id) {
 		return repository.findById(id);
+	}
+	
+	@Transactional
+	public Usuario getByCpf(String cpf) {		
+		
+		Usuario user = repository.findByCpf(cpf);	
+		
+		if(user == null) {
+			throw new RegistroNaoEncontradoException("Usuário não encontrado");
+		}
+		
+		return user;
 	}
 	
 	

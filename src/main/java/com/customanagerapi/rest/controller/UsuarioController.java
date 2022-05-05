@@ -1,6 +1,7 @@
 package com.customanagerapi.rest.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.customanagerapi.domain.entity.Usuario;
 import com.customanagerapi.domain.utils.SearchRequest;
+import com.customanagerapi.exception.RegistroNaoEncontradoException;
 import com.customanagerapi.exception.UsuarioOuSenhaInvalidaException;
 import com.customanagerapi.rest.dto.CredenciaisDTO;
 import com.customanagerapi.rest.dto.TokenDTO;
@@ -91,6 +93,14 @@ public class UsuarioController {
 	@ApiOperation("Obter detalhes de um usuário pelo ID")
 	public Usuario getUserById(@PathVariable("id") long id) {
 		return usuarioService.getUserById(id);
+	}
+	
+	@GetMapping("/get-by-cpf")
+	@ApiOperation("Obter um usuário por seu CPF")
+	public Usuario getByCpf(String cpf) throws Exception {
+		
+		return usuarioService.getByCpf(cpf);		
+		
 	}
 	
 	

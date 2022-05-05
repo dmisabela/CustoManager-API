@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.customanagerapi.domain.utils.ApiErrors;
 import com.customanagerapi.exception.EmailException;
+import com.customanagerapi.exception.RegistroNaoEncontradoException;
+import com.customanagerapi.exception.RegraNegocioException;
 import com.customanagerapi.exception.UsuarioOuSenhaInvalidaException;
 
 @RestControllerAdvice
@@ -42,6 +44,20 @@ public class ApplicationControllerAdvice {
 		String errors = ex.getMessage();		
 		return new ApiErrors(errors);
 	}	
+	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(RegraNegocioException.class)
+	public ApiErrors handleUsuarioOuSenhaInvalidaException (RegraNegocioException ex) {
+		String errors = ex.getMessage();		
+		return new ApiErrors(errors);
+	}	
+	
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler(RegistroNaoEncontradoException.class)
+	public ApiErrors handleUsuarioOuSenhaInvalidaException (RegistroNaoEncontradoException ex) {
+		String errors = ex.getMessage();		
+		return new ApiErrors(errors);
+	}
 		
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(EmailException.class)
