@@ -2,6 +2,7 @@ package com.customanagerapi.service;
 
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,11 +31,21 @@ public class AssociadoService {
 	@Transactional
 	public Associado salvar(Associado associado)  {
 		
+		associado.setDataCriacao(LocalDateTime.now());	
+		
 		Empresa emp = empresaRepository.getById(associado.getIdEmpresa());		
 		associado.setEmpresaAssociado(emp);
 		
 		return associadoRepository.save(associado);
-	}	
+	}
+	
+	@Transactional
+	public Optional<Associado> getAssociadoById(long id) {
+		
+		Optional<Associado> assoc = associadoRepository.findById(id);		
+		return assoc; 
+		
+	}
 	
 	@Transactional
 	public List<Associado> getAssociadosByEmpresaId(@PathVariable long id) {

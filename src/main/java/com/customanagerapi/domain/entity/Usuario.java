@@ -90,12 +90,12 @@ public class Usuario implements Serializable {
 //	private byte[] fotoPerfil;
 	
 	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL, orphanRemoval = true)
+            cascade = CascadeType.ALL)
 	@JsonIgnore
     private Set<Empresa> empresa;
 	
 	@OneToMany(mappedBy = "usuarioFuncionario", fetch = FetchType.LAZY,
-			cascade = CascadeType.ALL, orphanRemoval = true)
+			cascade = CascadeType.ALL)
 	@JsonIgnore
     Set<VinculoUsuarioEmpresa> vinculos;
 	

@@ -1,6 +1,7 @@
 package com.customanagerapi.rest.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.customanagerapi.domain.entity.Associado;
+import com.customanagerapi.domain.entity.Empresa;
 import com.customanagerapi.service.AssociadoService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,12 @@ public class AssociadoController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public Associado insertAssociado(@RequestBody @Valid Associado associado) throws Exception {		
 		return associadoService.salvar(associado);
+	}
+	
+	@GetMapping("/get-by-id/{id}") 
+	@ApiOperation("Obter detalhes do associado pelo ID")
+	public Optional<Associado> getAssociadoById(@PathVariable("id") long id) {
+		return associadoService.getAssociadoById(id);
 	}
 	
 	@GetMapping("/get-associados-by-empresa-id")
