@@ -53,5 +53,9 @@ public class AssociadoService {
 		return associadoRepository.save(associado);
 	}
 	
+	@Transactional
+	public void delete(Long id) { 
+		associadoRepository.deleteById(id);
+	}
 
 }

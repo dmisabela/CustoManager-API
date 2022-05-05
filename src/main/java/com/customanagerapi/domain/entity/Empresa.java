@@ -71,7 +71,21 @@ public class Empresa implements Serializable {
 	@JoinColumn(name = "id_usuario_criador", nullable = false)
 	@JsonIgnore
 	private Usuario usuario;
-
+	
+	@OneToMany(mappedBy = "empresaTipoProd", fetch = FetchType.LAZY,
+			cascade = CascadeType.ALL)
+	@JsonIgnore
+    private Set<TipoProduto> tipoProduto;
+	
+	@OneToMany(mappedBy = "empresaMarcaProd", fetch = FetchType.LAZY,
+			cascade = CascadeType.ALL)
+	@JsonIgnore
+    private Set<MarcaProduto> marcaProduto;
+	
+	@OneToMany(mappedBy = "empresaProd", fetch = FetchType.LAZY,
+			cascade = CascadeType.ALL)
+	@JsonIgnore
+    private Set<Produto> produto;
 
 	@OneToMany(mappedBy = "empresaAssociado", fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL)
