@@ -1,5 +1,6 @@
 package com.customanagerapi.rest.controller;
 
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.customanagerapi.exception.EmailException;
+import com.customanagerapi.service.EmailService;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -19,22 +21,13 @@ import javax.mail.internet.MimeMessage;
 public class EmailController {
 
     @Autowired private JavaMailSender mailSender;
+    
+    @Autowired 
+    @Lazy
+    private EmailService service;
 
-    @RequestMapping(path = "/send-to-user", method = RequestMethod.GET)
+    @RequestMapping(path = "/send-recovery-password-email", method = RequestMethod.GET)
     public String sendMailToUser(String email, String token) throws EmailException {
-        try {
-            MimeMessage mail = mailSender.createMimeMessage();
-
-            MimeMessageHelper helper = new MimeMessageHelper( mail );
-            helper.setTo( email );
-            helper.setSubject( "Teste Envio de e-mail" );
-            helper.setText("<p>url-trocar-senha" + token + "</p>", true);
-            
-            mailSender.send(mail);
-            return "E-mail enviado com sucesso!";            
-            
-        } catch (EmailException | MessagingException e) {
-        	throw new EmailException();
-        }
+    	return service.sendRecoveryPasswordEmail(email, token);
     }
 }

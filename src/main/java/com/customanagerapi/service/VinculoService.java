@@ -40,6 +40,10 @@ public class VinculoService {
 	@Lazy
 	private AssociadoService associadoService;
 	
+	@Autowired
+	@Lazy
+	private EmailService emailService;
+	
 	public VinculoUsuarioEmpresa salvar(VinculoUsuarioEmpresa vinculo) throws Exception {			
 		try {
 			
@@ -61,6 +65,12 @@ public class VinculoService {
 			
 			Empresa emp = empresaRepository.getById(vinculo.getIdEmpresaVinculo());		
 			vinculo.setEmpresaVinculo(emp);
+			
+			emailService.sendVinculoEmail(
+						vinculo.getUsuarioCriador().getNome(), 
+						vinculo.getEmpresaVinculo().getNome(), 
+						vinculo.getUsuarioFuncionario().getLogin());
+			
 		    
 			return vinculoRepository.save(vinculo);			
 		}
