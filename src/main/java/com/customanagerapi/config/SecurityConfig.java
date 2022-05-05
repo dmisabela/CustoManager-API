@@ -62,24 +62,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return verifiedRoles;				
 	}
 	
-	private CorsConfigurationSource configurationSource() {
-	      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	      CorsConfiguration config = new CorsConfiguration();
-	      config.addAllowedOrigin("*");
-	      config.addAllowedHeader("*");
-	      config.addAllowedHeader("*");
-	      config.addAllowedMethod("*");
-	      source.registerCorsConfiguration("/**", config);
-	      return source;
-	    }
+//	private CorsConfigurationSource configurationSource() {
+//	      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//	      CorsConfiguration config = new CorsConfiguration();
+//	      config.addAllowedOrigin("*");
+//	      config.addAllowedHeader("*");
+//	      config.addAllowedHeader("*");
+//	      config.addAllowedMethod("*");
+//	      source.registerCorsConfiguration("/**", config);
+//	      return source;
+//	    }
 
 
     @Override
     protected void configure( HttpSecurity http ) throws Exception {
         http
-	        .cors().configurationSource(configurationSource())
-	        .and()
-        	.csrf().disable()   
+        .cors().and().csrf().disable()
             .authorizeRequests()
             	.antMatchers("/users/update")
             		.hasAnyRole(verifyHasAnyRole("/users/update"))
