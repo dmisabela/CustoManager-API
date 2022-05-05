@@ -78,5 +78,14 @@ public class VinculoService {
 		return vinculoRepository.findByEmpresaVinculo(empresaVinculo.get());
 	}
 	
+	@Transactional
+	public VinculoUsuarioEmpresa update(VinculoUsuarioEmpresa vinculo) {		
+		
+		Empresa emp = empresaRepository.getById(vinculo.getIdEmpresaVinculo());		
+		vinculo.setEmpresaVinculo(emp);
+		
+		return vinculoRepository.save(vinculo);
+	}
+	
 	
 }
