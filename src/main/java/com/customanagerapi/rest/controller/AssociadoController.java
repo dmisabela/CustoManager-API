@@ -1,9 +1,12 @@
 package com.customanagerapi.rest.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +33,14 @@ public class AssociadoController {
 	public Associado insertAssociado(@RequestBody @Valid Associado associado) throws Exception {		
 		return associadoService.salvar(associado);
 	}
+	
+	@GetMapping("/get-associados-by-empresa-id")
+	@ApiOperation("Obter todos os associados de uma empresa específica")
+	public List<Associado> getAssociadosByEmpresaId(long idEmpresa) throws Exception {		
+		
+		return associadoService.getAssociadosByEmpresaId(idEmpresa);
+	}
+	
 	
 
 }

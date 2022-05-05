@@ -2,7 +2,6 @@ package com.customanagerapi.domain.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

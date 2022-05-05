@@ -20,7 +20,7 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.br.CNPJ;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -74,13 +74,13 @@ public class Empresa implements Serializable {
 
 
 	@OneToMany(mappedBy = "empresaAssociado", fetch = FetchType.LAZY,
-			cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonIgnore
+			cascade = CascadeType.ALL)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
     private Set<Associado> associado;
 
 	@OneToMany(mappedBy = "empresaVinculo", fetch = FetchType.LAZY,
-			cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonIgnore
+			cascade = CascadeType.ALL)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	    Set<VinculoUsuarioEmpresa> vinculos;	
 	
 	

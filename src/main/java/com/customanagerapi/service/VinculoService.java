@@ -1,6 +1,8 @@
 package com.customanagerapi.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.customanagerapi.domain.entity.Associado;
 import com.customanagerapi.domain.entity.Empresa;
@@ -67,5 +70,13 @@ public class VinculoService {
 		}
 
 	}		
+	
+	@Transactional
+	public List<VinculoUsuarioEmpresa> getVinculosByEmpresaId(@PathVariable long id) {
+		
+		Optional<Empresa> empresaVinculo = empresaRepository.findById(id);			
+		return vinculoRepository.findByEmpresaVinculo(empresaVinculo.get());
+	}
+	
 	
 }
