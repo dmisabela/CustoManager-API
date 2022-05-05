@@ -97,8 +97,6 @@ public class UsuarioService implements UserDetailsService {
 	
 	@Transactional
 	public Usuario update(Usuario usuario) {
-		String senhaCriptografada = encoder.encode(usuario.getSenha());
-		usuario.setSenha(senhaCriptografada);	
 		return repository.save(usuario);
 	}
 	
