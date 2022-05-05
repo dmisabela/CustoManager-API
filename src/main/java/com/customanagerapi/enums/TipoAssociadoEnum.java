@@ -2,7 +2,6 @@ package com.customanagerapi.enums;
 
 public enum TipoAssociadoEnum {
     CLIENTE("CLIENTE"),
-    FUNCIONARIO("FUNCIONARIO"),
     FORNECEDOR("FORNECEDOR");
 
     private String text;

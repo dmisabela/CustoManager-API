@@ -19,6 +19,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -36,7 +38,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "USUARIOS")
-@EqualsAndHashCode(exclude = "empresa")
+@EqualsAndHashCode(exclude = {"empresa", "vinculos"})
 public class Usuario implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -88,11 +90,13 @@ public class Usuario implements Serializable {
 //	private byte[] fotoPerfil;
 	
 	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-	@JsonManagedReference
+            cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
     private Set<Empresa> empresa;
 	
-	@OneToMany(mappedBy = "usuarioFuncionario")
-    Set<VinculoAssociadoEmpresa> vinculos;
+	@OneToMany(mappedBy = "usuarioFuncionario", fetch = FetchType.LAZY,
+			cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
+    Set<VinculoUsuarioEmpresa> vinculos;
 	
 }

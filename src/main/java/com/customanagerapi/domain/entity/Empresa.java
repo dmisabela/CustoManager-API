@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,18 +15,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.br.CNPJ;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -34,6 +34,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "EMPRESAS")
+@EqualsAndHashCode(exclude = {"associado", "vinculos"})
 public class Empresa implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -62,13 +63,26 @@ public class Empresa implements Serializable {
 		
 	@Column (name = "data_criacao")
 	private LocalDateTime dataCriacao;	
+	
+	@Transient
+	private Integer idUsuarioCriador;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false, targetEntity = Usuario.class)
 	@JoinColumn(name = "id_usuario_criador", nullable = false)
-	@JsonBackReference
+	@JsonIgnore
 	private Usuario usuario;
+
+
+	@OneToMany(mappedBy = "empresaAssociado", fetch = FetchType.LAZY,
+			cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
+    private Set<Associado> associado;
+
+	@OneToMany(mappedBy = "empresaVinculo", fetch = FetchType.LAZY,
+			cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
+	    Set<VinculoUsuarioEmpresa> vinculos;	
 	
-	@OneToMany(mappedBy = "empresa")
-    Set<VinculoAssociadoEmpresa> vinculos;
+	
 	
 }

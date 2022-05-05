@@ -10,26 +10,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.customanagerapi.domain.entity.VinculoUsuarioEmpresa;
-import com.customanagerapi.service.VinculoService;
-
+import com.customanagerapi.domain.entity.Associado;
+import com.customanagerapi.service.AssociadoService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/vinculos")
+@RequestMapping("/associados")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:8080", "https://customanager.netlify.app"})
-public class VinculoController {
+public class AssociadoController {
 	
-	private final VinculoService vinculoService; 
+	private final AssociadoService associadoService; 
 	
 	
-	@PostMapping("/criar-vinculo")
-	@ApiOperation("Cadastro de vinculo")
+	@PostMapping("/register")
+	@ApiOperation("Cadastro de associados")
 	@ResponseStatus(HttpStatus.CREATED)
-	public VinculoUsuarioEmpresa insertVinculo(@RequestBody @Valid VinculoUsuarioEmpresa vinculo) throws Exception {		
-		return vinculoService.salvar(vinculo);
+	public Associado insertAssociado(@RequestBody @Valid Associado associado) throws Exception {		
+		return associadoService.salvar(associado);
 	}
 	
 

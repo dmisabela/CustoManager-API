@@ -44,11 +44,13 @@ public class EmpresaService {
 		empresa.setDataCriacao(LocalDateTime.now());	
 		
 		Usuario criador = usuarioRepository
-                .findById(empresa.getUsuario().getId());
+                .findById(empresa.getIdUsuarioCriador());
 		
 		if (criador == null) {
 			throw new RegraNegocioException("Código de usuário inválido.");
 		}
+		
+		empresa.setUsuario(criador);
 		
 				
 		return empresaRepository.save(empresa);
@@ -66,7 +68,13 @@ public class EmpresaService {
 		Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 		
-		return empresaRepository.findAll(pageable);
+		Page<Empresa> emp = empresaRepository.findAll(pageable);
+		
+		for (Empresa empr : emp.getContent()) {
+			empr.setIdUsuarioCriador((int) empr.getUsuario().getId());
+		}
+		
+		return emp;
 	} 
 	
 	public Page<Empresa> searchEmpresas(SearchRequest request, String orderBy, 
@@ -81,20 +89,34 @@ public class EmpresaService {
 	
 	@Transactional
 	public Optional<Empresa> getEmpresaById(long id) {
-		return empresaRepository.findById(id);
+		
+		Optional<Empresa> emp = empresaRepository.findById(id);
+		
+		if (emp.isPresent()) {
+			Integer idUsuarioCriador = (int) emp.get().getUsuario().getId();			
+			emp.get().setIdUsuarioCriador(idUsuarioCriador);
+		}
+		
+		return emp; 
+		
 	}
 	
 	@Transactional
 	public List<Empresa> getEmpresaByUserId(@PathVariable long id) {
 		
-		Usuario user = usuarioRepository.findById(id);
-		
+		Usuario user = usuarioRepository.findById(id);		
 		return empresaRepository.findByUsuario(user);
 	}
 	
 	
 	@Transactional
 	public Empresa update(Empresa empresa) {
+		
+		Usuario criador = usuarioRepository
+                .findById(empresa.getIdUsuarioCriador());
+		
+		empresa.setUsuario(criador);
+		
 		return empresaRepository.save(empresa);
 	}
 	

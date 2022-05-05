@@ -13,11 +13,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.br.CNPJ;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,8 +31,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "VINCULO_ASSOCIADOS_EMPRESAS")
-public class VinculoAssociadoEmpresa implements Serializable {
+@Table(name = "VINCULO_USUARIOS_EMPRESAS")
+public class VinculoUsuarioEmpresa implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 		
@@ -39,13 +41,13 @@ public class VinculoAssociadoEmpresa implements Serializable {
 	@Column(name = "id")
 	private long id;
 	
-	@ManyToOne
-	@JoinColumn(name = "id_empresa")
-	Empresa empresa;
+	@Transient
+	private Long idEmpresaVinculo;
 	
-	@ManyToOne(cascade=CascadeType.PERSIST)
-	@JoinColumn(name = "id_associado")
-	Associado associado;	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "id_empresa", nullable = false)
+	@JsonIgnore
+	Empresa empresaVinculo;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_usuario_funcionario")
@@ -57,6 +59,9 @@ public class VinculoAssociadoEmpresa implements Serializable {
 		
 	@Column (name = "data_criacao")
 	private LocalDateTime dataCriacao;	
+	
+	@Column (name = "admin_empresarial")
+	private Boolean adminEmpresarial;	
 	
 	@Column (name = "status")
 	private Boolean status;
