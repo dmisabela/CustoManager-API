@@ -97,5 +97,10 @@ public class VinculoService {
 		return vinculoRepository.save(vinculo);
 	}
 	
+	@Transactional
+	public void delete(Long id) { 
+		vinculoRepository.deleteById(id);
+	}
+	
 	
 }

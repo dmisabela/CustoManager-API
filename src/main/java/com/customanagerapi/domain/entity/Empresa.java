@@ -67,7 +67,7 @@ public class Empresa implements Serializable {
 	@Transient
 	private Integer idUsuarioCriador;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false, targetEntity = Usuario.class)
+	@ManyToOne
 	@JoinColumn(name = "id_usuario_criador", nullable = false)
 	@JsonIgnore
 	private Usuario usuario;

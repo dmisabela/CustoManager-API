@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.customanagerapi.exception.EmailException;
 import com.customanagerapi.service.EmailService;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 @RestController
 @RequestMapping("/email")
-@CrossOrigin(origins = {"http://localhost:8080", "https://customanager.netlify.app"})
+@CrossOrigin(origins = "*")
 public class EmailController {
 
     @Autowired private JavaMailSender mailSender;

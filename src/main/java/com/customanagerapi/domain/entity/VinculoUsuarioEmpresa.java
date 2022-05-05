@@ -39,7 +39,7 @@ public class VinculoUsuarioEmpresa implements Serializable {
 	@Transient
 	private Long idEmpresaVinculo;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne
 	@JoinColumn(name = "id_empresa", nullable = false)
 	@JsonIgnore
 	Empresa empresaVinculo;

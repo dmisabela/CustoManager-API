@@ -6,7 +6,9 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/vinculos")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:8080", "https://customanager.netlify.app"})
+@CrossOrigin(origins = "*")
 public class VinculoController {
 	
 	private final VinculoService vinculoService; 
@@ -48,5 +50,10 @@ public class VinculoController {
 		return vinculoService.update(vinculo);
 	}
 	
+	@DeleteMapping("/delete/{id}")
+	@ApiOperation("Excluir vínculo")
+	public void deleteVinculo(@PathVariable("id") Long id) {
+		vinculoService.delete(id);
+	}
 
 }

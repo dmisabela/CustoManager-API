@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/empresas")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:8080", "https://customanager.netlify.app"})
+@CrossOrigin(origins = "*")
 public class EmpresaController {
 	
 	private final EmpresaService empresaService;

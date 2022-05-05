@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/associados")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:8080", "https://customanager.netlify.app"})
+@CrossOrigin(origins = "*")
 public class AssociadoController {
 	
 	private final AssociadoService associadoService; 

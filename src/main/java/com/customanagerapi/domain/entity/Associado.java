@@ -85,7 +85,7 @@ public class Associado implements Serializable {
 	@Transient
 	private Long idEmpresa; 
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne
 	@JoinColumn(name = "id_empresa", nullable = false)
 	@JsonIgnore
 	private Empresa empresaAssociado;

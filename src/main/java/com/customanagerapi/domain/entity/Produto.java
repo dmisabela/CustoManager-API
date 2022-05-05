@@ -47,15 +47,15 @@ public class Produto implements Serializable {
 	@NotEmpty(message = "{campo.obrigatorio.valor}")
 	private Double valor_unitario;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne
 	@JoinColumn(name = "id_tipo", nullable = false)
 	private TipoProduto tipoProduto;	
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne
 	@JoinColumn(name = "id_marca", nullable = false)
 	private MarcaProduto marcaProduto;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne
 	@JoinColumn(name = "id_empresa", nullable = false)
 	private Empresa empresaProd;
 	

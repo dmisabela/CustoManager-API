@@ -1,7 +1,5 @@
 package com.customanagerapi.rest.controller;
 
-import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.customanagerapi.domain.entity.Usuario;
 import com.customanagerapi.domain.utils.SearchRequest;
-import com.customanagerapi.exception.RegistroNaoEncontradoException;
 import com.customanagerapi.exception.UsuarioOuSenhaInvalidaException;
 import com.customanagerapi.rest.dto.CredenciaisDTO;
 import com.customanagerapi.rest.dto.TokenDTO;
@@ -35,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:8080", "https://customanager.netlify.app"})
+@CrossOrigin(origins = "*")
 public class UsuarioController {
 	
 	private final UsuarioService usuarioService;
