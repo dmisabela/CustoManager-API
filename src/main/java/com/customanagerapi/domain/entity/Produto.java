@@ -13,9 +13,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +34,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "PRODUTOS")
-@EqualsAndHashCode(exclude = "empresaProd")
 public class Produto implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -44,19 +48,34 @@ public class Produto implements Serializable {
 	private String nome;
 	
 	@Column(name = "valor_unitario", length = 100)
-	@NotEmpty(message = "{campo.obrigatorio.valor}")
+	@NotNull(message = "{campo.obrigatorio.valor}")
 	private Double valor_unitario;
+	
+	@Transient
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private Long idEmpresa;
+	
+	@Transient
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private Long idTipo;
+	
+	@Transient
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private Long idMarca;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_tipo", nullable = false)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private TipoProduto tipoProduto;	
 	
 	@ManyToOne
 	@JoinColumn(name = "id_marca", nullable = false)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private MarcaProduto marcaProduto;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_empresa", nullable = false)
-	private Empresa empresaProd;
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	private Empresa empresa;
 	
 }

@@ -14,10 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +33,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "PRODUTO_TIPO")
-@EqualsAndHashCode(exclude = "empresaTipoProd")
+@EqualsAndHashCode(exclude = "produto")
 public class TipoProduto implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -48,14 +50,21 @@ public class TipoProduto implements Serializable {
 	@Column(name = "descricao", length = 200)
 	private String descricao;	
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@Column
+	private Boolean ativo;	
+	
+	@Transient
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private Long idEmpresa;
+	
+	@ManyToOne
 	@JoinColumn(name = "id_empresa", nullable = false)
 	@JsonIgnore
-	private Empresa empresaTipoProd;
+	private Empresa empresa;
 	
 	@OneToMany(mappedBy = "tipoProduto", fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL)
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
+	@JsonIgnore
     private Set<Produto> produto;
 	
 }

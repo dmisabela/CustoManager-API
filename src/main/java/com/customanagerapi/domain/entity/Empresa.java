@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "EMPRESAS")
-@EqualsAndHashCode(exclude = {"associado", "vinculos"})
+@EqualsAndHashCode(exclude = {"associado", "vinculos", "produto", "marcaProduto", "tipoProduto"})
 public class Empresa implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -72,17 +72,17 @@ public class Empresa implements Serializable {
 	@JsonIgnore
 	private Usuario usuario;
 	
-	@OneToMany(mappedBy = "empresaTipoProd", fetch = FetchType.LAZY,
+	@OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL)
 	@JsonIgnore
     private Set<TipoProduto> tipoProduto;
 	
-	@OneToMany(mappedBy = "empresaMarcaProd", fetch = FetchType.LAZY,
+	@OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL)
 	@JsonIgnore
     private Set<MarcaProduto> marcaProduto;
 	
-	@OneToMany(mappedBy = "empresaProd", fetch = FetchType.LAZY,
+	@OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL)
 	@JsonIgnore
     private Set<Produto> produto;
