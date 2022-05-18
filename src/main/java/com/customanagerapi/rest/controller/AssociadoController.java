@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.customanagerapi.domain.entity.Associado;
-import com.customanagerapi.domain.entity.Empresa;
 import com.customanagerapi.service.AssociadoService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +44,9 @@ public class AssociadoController {
 		return associadoService.getAssociadoById(id);
 	}
 	
-	@GetMapping("/get-associados-by-empresa-id")
+	@GetMapping("/get-associados-by-empresa-id/{idEmpresa}")
 	@ApiOperation("Obter todos os associados de uma empresa específica")
-	public List<Associado> getAssociadosByEmpresaId(long idEmpresa) throws Exception {		
+	public List<Associado> getAssociadosByEmpresaId(@PathVariable("idEmpresa") long idEmpresa) throws Exception {		
 		
 		return associadoService.getAssociadosByEmpresaId(idEmpresa);
 	}

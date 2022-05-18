@@ -7,14 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.customanagerapi.domain.entity.MarcaProduto;
 import com.customanagerapi.domain.entity.Produto;
-import com.customanagerapi.domain.entity.TipoProduto;
 import com.customanagerapi.service.ProdutoService;
 
 import io.swagger.annotations.ApiOperation;
@@ -36,16 +35,24 @@ public class ProdutoController {
 	}
 	
 	
-	@GetMapping("/get-all")
-	@ApiOperation("Obter todos os produtos")
-	public Page<Produto> getAllProdutos(
+	@GetMapping("/get-produtos-by-empresa-id")
+	@ApiOperation("Obter todos os produtos de uma empresa específica")
+	public Page<Produto> getMarcasByEmpresaId(
+			Long idEmpresa,
 			String orderBy, 
 			Boolean orderAsc,
 			Integer pageNumber, 
 			Integer pageSize) {		
 		
-		return produtoService.getAllProdutos(orderBy, orderAsc, pageNumber, pageSize);
+		return produtoService.getProdutosByEmpresaId(idEmpresa, orderBy, orderAsc, pageNumber, pageSize);
 	}
+	
+	@PutMapping("/update")
+	@ApiOperation("Alterar dados do produto")
+	public Produto updateProduto(@RequestBody @Valid Produto produto) throws Exception {
+		return produtoService.update(produto);
+	}
+	
 	
 	
 

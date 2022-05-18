@@ -6,9 +6,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,9 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.customanagerapi.domain.entity.Empresa;
-import com.customanagerapi.domain.entity.Usuario;
 import com.customanagerapi.domain.utils.SearchRequest;
-import com.customanagerapi.domain.utils.SearchSpecification;
 import com.customanagerapi.service.EmpresaService;
 
 import io.swagger.annotations.ApiOperation;
@@ -73,9 +68,9 @@ public class EmpresaController {
 	}
 	
 	
-	@GetMapping("/get-empresas-by-usuario")
+	@GetMapping("/get-empresas-by-usuario/{idUsuario}")
 	@ApiOperation("Obter todas as empresas de um usuário específico")
-	public List<Empresa> getEmpresaByUserId(long idUsuario) throws Exception {		
+	public List<Empresa> getEmpresaByUserId(@PathVariable("idUsuario") long idUsuario) throws Exception {		
 		
 		return empresaService.getEmpresaByUserId(idUsuario);
 	}
