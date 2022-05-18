@@ -1,11 +1,14 @@
 package com.customanagerapi.domain.entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,9 +18,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.customanagerapi.enums.TipoMovimentacaoEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -32,8 +36,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "PRODUTOS")
-public class Produto implements Serializable {
+@Table(name = "MOVIMENTACOES")
+@EqualsAndHashCode(exclude = "movimentacoes")
+public class Movimentacao implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 		
@@ -41,43 +46,36 @@ public class Produto implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	protected long id;
-	
-	@Column(name = "nome", length = 100)
-	@NotEmpty(message = "{campo.obrigatorio.nome}")
-	private String nome;
-	
-	@Column(name = "valor_unitario", length = 100)
+		
+	@Column(name = "valor_total")
 	@NotNull(message = "{campo.obrigatorio.valor}")
-	private Double valor_unitario;
+	private Double valorTotal;	
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "tipo_movimentacao", length = 6)
+	private TipoMovimentacaoEnum tipoMovimentacao;
+	
+	@Column (name = "data_movimentacao")
+	private LocalDateTime dataMovimentacao;	
 	
 	@Transient
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private Long idEmpresa;
 	
-	@Transient
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private Long idTipo;
-	
-	@Transient
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private Long idMarca;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_tipo", nullable = false)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	private TipoProduto tipoProduto;	
-	
-	@ManyToOne
-	@JoinColumn(name = "id_marca", nullable = false)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	private MarcaProduto marcaProduto;
+	@Column
+	private Boolean ativo;	
 	
 	@ManyToOne
 	@JoinColumn(name = "id_empresa", nullable = false)
 	@JsonIgnore
-	private Empresa empresa;	
+	private Empresa empresa;
 	
-	@OneToMany(mappedBy = "produto", fetch = FetchType.LAZY,
+	@ManyToOne
+	@JoinColumn(name = "id_associado", nullable = false)
+	@JsonIgnore
+	private Associado associado;
+	
+	@OneToMany(mappedBy = "movimentacao", fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL)
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	    Set<MovimentacaoProduto> movimentacaoProdutos;
