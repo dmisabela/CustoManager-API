@@ -15,6 +15,8 @@ import com.customanagerapi.domain.entity.Empresa;
 import com.customanagerapi.domain.entity.MarcaProduto;
 import com.customanagerapi.domain.entity.Produto;
 import com.customanagerapi.domain.entity.TipoProduto;
+import com.customanagerapi.domain.utils.SearchRequest;
+import com.customanagerapi.domain.utils.SearchSpecification;
 import com.customanagerapi.repository.EmpresaRepository;
 import com.customanagerapi.repository.MarcaProdutoRepository;
 import com.customanagerapi.repository.ProdutoRepository;
@@ -88,6 +90,15 @@ public class ProdutoService {
 		
 		return prd;
 	} 
+	
+	public Page<Produto> searchProdutos(SearchRequest request, String orderBy, 
+    		Boolean orderAsc, Integer pageNumber, Integer pageSize) {
+        SearchSpecification<Produto> specification = new SearchSpecification<>(request);
+        Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+	        
+        return produtoRepository.findAll(specification, pageable);
+    }
 	
 	
 	@Transactional

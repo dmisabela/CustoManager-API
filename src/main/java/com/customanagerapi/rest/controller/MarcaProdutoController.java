@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.customanagerapi.domain.entity.MarcaProduto;
+import com.customanagerapi.domain.utils.SearchRequest;
 import com.customanagerapi.service.MarcaProdutoService;
 
 import io.swagger.annotations.ApiOperation;
@@ -52,5 +53,12 @@ public class MarcaProdutoController {
 	public MarcaProduto updateMarca(@RequestBody @Valid MarcaProduto marcaProduto) throws Exception {
 		return marcaService.update(marcaProduto);
 	}
+	
+	@PostMapping("/search")
+    @ApiOperation("Pesquisar marca de produto(s) por filtros")
+    public Page<MarcaProduto> search(@RequestBody SearchRequest request,
+    					String orderBy, Boolean orderAsc, Integer pageNumber, Integer pageSize ) {
+        return marcaService.searchMarca(request, orderBy, orderAsc, pageNumber, pageSize);
+    }
 	
 }

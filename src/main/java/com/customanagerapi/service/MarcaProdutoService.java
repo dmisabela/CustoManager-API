@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.customanagerapi.domain.entity.Empresa;
 import com.customanagerapi.domain.entity.MarcaProduto;
+import com.customanagerapi.domain.utils.SearchRequest;
+import com.customanagerapi.domain.utils.SearchSpecification;
 import com.customanagerapi.repository.EmpresaRepository;
 import com.customanagerapi.repository.MarcaProdutoRepository;
 
@@ -61,6 +63,16 @@ public class MarcaProdutoService {
 		
 		return marcaProdutoRepository.save(marcaProduto);
 	}
+	
+	public Page<MarcaProduto> searchMarca(SearchRequest request, String orderBy, 
+    		Boolean orderAsc, Integer pageNumber, Integer pageSize) {
+        SearchSpecification<MarcaProduto> specification = new SearchSpecification<>(request);
+        Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+	        
+        return marcaProdutoRepository.findAll(specification, pageable);
+    }
+	
 	
 
 }

@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.customanagerapi.domain.entity.Empresa;
 import com.customanagerapi.domain.entity.TipoProduto;
+import com.customanagerapi.domain.utils.SearchRequest;
+import com.customanagerapi.domain.utils.SearchSpecification;
 import com.customanagerapi.repository.EmpresaRepository;
 import com.customanagerapi.repository.TipoProdutoRepository;
 
@@ -62,6 +64,16 @@ public class TipoProdutoService {
 		
 		return tipoProdutoRepository.save(tipoProduto);
 	}
+	
+	public Page<TipoProduto> searchTipoProdutos(SearchRequest request, String orderBy, 
+    		Boolean orderAsc, Integer pageNumber, Integer pageSize) {
+        SearchSpecification<TipoProduto> specification = new SearchSpecification<>(request);
+        Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+	        
+        return tipoProdutoRepository.findAll(specification, pageable);
+    }
+	
 	
 	
 	

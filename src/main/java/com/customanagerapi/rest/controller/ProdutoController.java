@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.customanagerapi.domain.entity.Produto;
+import com.customanagerapi.domain.utils.SearchRequest;
 import com.customanagerapi.service.ProdutoService;
 
 import io.swagger.annotations.ApiOperation;
@@ -52,6 +53,13 @@ public class ProdutoController {
 	public Produto updateProduto(@RequestBody @Valid Produto produto) throws Exception {
 		return produtoService.update(produto);
 	}
+	
+	@PostMapping("/search")
+    @ApiOperation("Pesquisar produto(s) por filtros")
+    public Page<Produto> search(@RequestBody SearchRequest request,
+    					String orderBy, Boolean orderAsc, Integer pageNumber, Integer pageSize ) {
+        return produtoService.searchProdutos(request, orderBy, orderAsc, pageNumber, pageSize);
+    }
 	
 	
 	
