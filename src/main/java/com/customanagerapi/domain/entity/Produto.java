@@ -49,6 +49,9 @@ public class Produto implements Serializable {
 	@NotNull(message = "{campo.obrigatorio.valor}")
 	private Double valor_unitario;
 	
+	@Column
+	private Boolean ativo;	
+	
 	@Transient
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private Long idEmpresa;

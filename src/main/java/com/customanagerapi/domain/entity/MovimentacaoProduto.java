@@ -49,10 +49,6 @@ public class MovimentacaoProduto implements Serializable {
 	@JsonIgnore
 	private Movimentacao movimentacao;
 	
-	@Transient
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private Long idProduto;
-	
 	@ManyToOne
 	@JoinColumn(name = "id_produto", nullable = false)
 	private Produto produto;

@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.customanagerapi.domain.entity.MarcaProduto;
 import com.customanagerapi.domain.entity.Movimentacao;
+import com.customanagerapi.domain.utils.SearchRequest;
 import com.customanagerapi.service.MovimentacaoService;
 
 import io.swagger.annotations.ApiOperation;
@@ -37,6 +38,11 @@ public class MovimentacaoController {
 		return movimentacaoService.salvar(movimentacao);
 	}
 	
+	@PutMapping("/update")
+	@ApiOperation("Editar dados da movimentação")
+	public Boolean updateMovimentacao(@RequestBody @Valid Movimentacao movimentacao) throws Exception {		
+		return movimentacaoService.salvar(movimentacao);
+	}
 	
 	@GetMapping("/get-movimentacoes-by-empresa-id")
 	@ApiOperation("Obter todas as movimentações de uma empresa específica")
@@ -55,6 +61,13 @@ public class MovimentacaoController {
 	public Optional<Movimentacao> getMovimentacaoById(@PathVariable("id") long id) {
 		return movimentacaoService.getMovimentacaoById(id);
 	}
+	
+	@PostMapping("/search")
+    @ApiOperation("Pesquisar movimentação(ões) por filtros")
+    public Page<Movimentacao> search(@RequestBody SearchRequest request,
+    					String orderBy, Boolean orderAsc, Integer pageNumber, Integer pageSize ) {
+        return movimentacaoService.searchMovimentacoes(request, orderBy, orderAsc, pageNumber, pageSize);
+    }
 	
 
 }

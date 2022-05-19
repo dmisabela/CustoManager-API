@@ -16,6 +16,9 @@ import com.customanagerapi.domain.entity.Associado;
 import com.customanagerapi.domain.entity.Empresa;
 import com.customanagerapi.domain.entity.Movimentacao;
 import com.customanagerapi.domain.entity.MovimentacaoProduto;
+import com.customanagerapi.domain.entity.Produto;
+import com.customanagerapi.domain.utils.SearchRequest;
+import com.customanagerapi.domain.utils.SearchSpecification;
 import com.customanagerapi.repository.AssociadoRepository;
 import com.customanagerapi.repository.EmpresaRepository;
 import com.customanagerapi.repository.MovimentacaoRepository;
@@ -55,11 +58,16 @@ public class MovimentacaoService {
 			Associado assoc = associadoRepository.getById(movimentacao.getIdAssociado());
 			movimentacao.setAssociado(assoc);
 			
-			List<MovimentacaoProduto> mp = movimentacao.getMovimentacaoProdutos();	
-			
+			List<MovimentacaoProduto> mp = movimentacao.getMovimentacaoProdutos();					
+				
 			if (movimentacao.getTipoMovimentacao().toString().equals("VENDA")) {
 				calcularValorTotalMovimentacao(movimentacao, mp);	
 			}
+			
+
+			if(!mp.isEmpty() || !(mp == null)) {
+				validarStatusProdutos(mp);
+			}		
 						
 			movimentacaoRepository.save(movimentacao);	
 
@@ -74,10 +82,26 @@ public class MovimentacaoService {
 		}
 		
 		catch (Exception e) {
-			throw new Exception("Ocorreu um erro ao salvar a movimentação");
+			throw new Exception(e.getMessage());
 		}
 		
 		
+	}
+	
+	public Boolean validarStatusProdutos(List<MovimentacaoProduto> mp) throws Exception {
+				
+		for(MovimentacaoProduto m1 : mp) {	
+			
+			Produto p = produtoRepository.getById(m1.getProduto().getId());		
+			
+			if(!p.getAtivo()) {				
+				throw new Exception(
+						"Um dos produtos escolhidos está inativo. "
+						+ "Verifique e tente novamente");
+			}			
+		}
+		
+		return true;
 	}
 	
 	
@@ -128,6 +152,17 @@ public class MovimentacaoService {
 		return movimentacaoRepository.findById(id);
 		
 	}
+	
+	
+	public Page<Movimentacao> searchMovimentacoes(SearchRequest request, String orderBy, 
+    		Boolean orderAsc, Integer pageNumber, Integer pageSize) {
+        SearchSpecification<Movimentacao> specification = new SearchSpecification<>(request);
+        Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+	        
+        return movimentacaoRepository.findAll(specification, pageable);
+    }
+	
 	
 	
 
