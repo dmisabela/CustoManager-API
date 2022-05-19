@@ -53,6 +53,8 @@ public class ProdutoService {
 		TipoProduto tp = tipoProdutoRepository.getById(produto.getIdTipo());
 		MarcaProduto mp = marcaProdutoRepository.getById(produto.getIdMarca());
 		
+		produto.setAtivo(true);
+		
 		if (this.validarStatusTipoEMarca(tp, mp)) {
 			produto.setTipoProduto(tp);	
 			produto.setMarcaProduto(mp);
@@ -81,16 +83,28 @@ public class ProdutoService {
 			String orderBy, 
 			Boolean orderAsc,
 			Integer pageNumber, 
-			Integer pageSize) {	
+			Integer pageSize) throws Exception {	
 		
-		Empresa emp = empresaRepository.getById(empresaId);
+		try {	
 		
-		Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
-		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+			Empresa emp = empresaRepository.getById(empresaId);
+			
+			Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
+			Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+			
+			Page<Produto> prd = produtoRepository.findByEmpresa(emp, pageable);
+			
+			for (Produto prod : prd.getContent()) {
+				prod.setNomeMarcaProduto(prod.getMarcaProduto().getNome().toString());	
+				prod.setNomeTipoProduto(prod.getTipoProduto().getNome().toString());			
+			}
+			
+			return prd;
 		
-		Page<Produto> prd = produtoRepository.findByEmpresa(emp, pageable);
-		
-		return prd;
+		}
+		catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
 	} 
 	
 
@@ -102,11 +116,19 @@ public class ProdutoService {
 	
 	public Page<Produto> searchProdutos(SearchRequest request, String orderBy, 
     		Boolean orderAsc, Integer pageNumber, Integer pageSize) {
+		
         SearchSpecification<Produto> specification = new SearchSpecification<>(request);
         Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+		
+		Page<Produto> prd = produtoRepository.findAll(specification, pageable);
+		
+		for (Produto prod : prd.getContent()) {
+			prod.setNomeMarcaProduto(prod.getMarcaProduto().getNome().toString());	
+			prod.setNomeTipoProduto(prod.getTipoProduto().getNome().toString());			
+		}
 	        
-        return produtoRepository.findAll(specification, pageable);
+        return prd;
     }
 	
 	

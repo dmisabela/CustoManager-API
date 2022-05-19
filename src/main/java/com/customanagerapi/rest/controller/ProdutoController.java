@@ -46,7 +46,7 @@ public class ProdutoController {
 			String orderBy, 
 			Boolean orderAsc,
 			Integer pageNumber, 
-			Integer pageSize) {		
+			Integer pageSize) throws Exception {		
 		
 		return produtoService.getProdutosByEmpresaId(idEmpresa, orderBy, orderAsc, pageNumber, pageSize);
 	}

@@ -118,7 +118,8 @@ public class UsuarioService implements UserDetailsService {
 									.orElseThrow(() -> new UsuarioOuSenhaInvalidaException());
 			
 			usuario.setId(verifyClaims.getId());
-			usuario.setAdmin(verifyClaims.isAdmin());		
+			usuario.setAdmin(verifyClaims.isAdmin());	
+			usuario.setNome(verifyClaims.getNome());	
 			return user;
 		}
 		

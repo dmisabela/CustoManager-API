@@ -47,7 +47,7 @@ public class EmpresaController {
 			String orderBy, 
 			Boolean orderAsc,
 			Integer pageNumber, 
-			Integer pageSize) {		
+			Integer pageSize) throws Exception {		
 		
 		return empresaService.getAllEmpresas(orderBy, orderAsc, pageNumber, pageSize);
 	}

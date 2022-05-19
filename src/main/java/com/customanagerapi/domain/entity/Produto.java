@@ -61,17 +61,23 @@ public class Produto implements Serializable {
 	private Long idTipo;
 	
 	@Transient
+	private String nomeTipoProduto;
+	
+	@Transient
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private Long idMarca;
 	
+	@Transient
+	private String nomeMarcaProduto;
+	
 	@ManyToOne
 	@JoinColumn(name = "id_tipo", nullable = false)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@JsonIgnore
 	private TipoProduto tipoProduto;	
 	
 	@ManyToOne
 	@JoinColumn(name = "id_marca", nullable = false)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@JsonIgnore
 	private MarcaProduto marcaProduto;
 	
 	@ManyToOne

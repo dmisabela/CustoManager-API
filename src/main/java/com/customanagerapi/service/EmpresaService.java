@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.customanagerapi.domain.entity.Empresa;
 import com.customanagerapi.domain.entity.Usuario;
@@ -61,19 +60,26 @@ public class EmpresaService {
 			String orderBy, 
 			Boolean orderAsc,
 			Integer pageNumber, 
-			Integer pageSize) {	
+			Integer pageSize) throws Exception {	
 		
 		
-		Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
-		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+		try {		
 		
-		Page<Empresa> emp = empresaRepository.findAll(pageable);
+			Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
+			Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+			
+			Page<Empresa> emp = empresaRepository.findAll(pageable);
+			
+			for (Empresa empr : emp.getContent()) {
+				empr.setIdUsuarioCriador((int) empr.getUsuario().getId());
+			}
+			
+			return emp;
 		
-		for (Empresa empr : emp.getContent()) {
-			empr.setIdUsuarioCriador((int) empr.getUsuario().getId());
 		}
-		
-		return emp;
+		catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
 	} 
 	
 	public Page<Empresa> searchEmpresas(SearchRequest request, String orderBy, 
@@ -101,10 +107,16 @@ public class EmpresaService {
 	}
 	
 	@Transactional
-	public List<Empresa> getEmpresaByUserId(@PathVariable long id) {
+	public List<Empresa> getEmpresaByUserId(long id) throws Exception {
 		
-		Usuario user = usuarioRepository.findById(id);		
-		return empresaRepository.findByUsuario(user);
+		try {
+			Usuario user = usuarioRepository.findById(id);		
+			return empresaRepository.findByUsuario(user);
+		}
+		catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+		
 	}
 	
 	
