@@ -9,9 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,13 +45,16 @@ public class MovimentacaoProduto implements Serializable {
 	private Double valorUnitario;	
 	
 	@ManyToOne
-	@JoinColumn(name = "id_movimentacao", nullable = false)
+	@JoinColumn(name = "id_movimentacao")
 	@JsonIgnore
 	private Movimentacao movimentacao;
 	
+	@Transient
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private Long idProduto;
+	
 	@ManyToOne
 	@JoinColumn(name = "id_produto", nullable = false)
-	@JsonIgnore
 	private Produto produto;
 	
 }

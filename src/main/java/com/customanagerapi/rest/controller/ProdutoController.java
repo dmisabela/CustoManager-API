@@ -38,7 +38,7 @@ public class ProdutoController {
 	
 	@GetMapping("/get-produtos-by-empresa-id")
 	@ApiOperation("Obter todos os produtos de uma empresa específica")
-	public Page<Produto> getMarcasByEmpresaId(
+	public Page<Produto> getProdutosByEmpresaId(
 			Long idEmpresa,
 			String orderBy, 
 			Boolean orderAsc,

@@ -2,14 +2,13 @@ package com.customanagerapi.domain.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +21,6 @@ import javax.validation.constraints.NotNull;
 
 import com.customanagerapi.enums.TipoMovimentacaoEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -37,7 +35,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "MOVIMENTACOES")
-@EqualsAndHashCode(exclude = "movimentacoes")
+@EqualsAndHashCode(exclude = "movimentacaoProdutos")
 public class Movimentacao implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -47,8 +45,8 @@ public class Movimentacao implements Serializable {
 	@Column(name = "id")
 	protected long id;
 		
-	@Column(name = "valor_total")
-	@NotNull(message = "{campo.obrigatorio.valor}")
+	@Column(name = "valor_total", nullable = false)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Double valorTotal;	
 	
 	@Enumerated(EnumType.STRING)
@@ -62,9 +60,10 @@ public class Movimentacao implements Serializable {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private Long idEmpresa;
 	
-	@Column
-	private Boolean ativo;	
-	
+	@Transient
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private Long idAssociado;
+		
 	@ManyToOne
 	@JoinColumn(name = "id_empresa", nullable = false)
 	@JsonIgnore
@@ -72,12 +71,10 @@ public class Movimentacao implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_associado", nullable = false)
-	@JsonIgnore
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Associado associado;
 	
-	@OneToMany(mappedBy = "movimentacao", fetch = FetchType.LAZY,
-			cascade = CascadeType.ALL)
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
-	    Set<MovimentacaoProduto> movimentacaoProdutos;
+	@OneToMany(mappedBy = "movimentacao", cascade = CascadeType.ALL)	
+	    List<MovimentacaoProduto> movimentacaoProdutos;
 	
 }
