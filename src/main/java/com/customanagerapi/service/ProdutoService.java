@@ -2,6 +2,8 @@ package com.customanagerapi.service;
 
 
 
+import java.util.Optional;
+
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -90,6 +92,13 @@ public class ProdutoService {
 		
 		return prd;
 	} 
+	
+
+	@Transactional
+	public Optional<Produto> getProdutoById(long id) {						
+		return produtoRepository.findById(id);
+		
+	}
 	
 	public Page<Produto> searchProdutos(SearchRequest request, String orderBy, 
     		Boolean orderAsc, Integer pageNumber, Integer pageSize) {

@@ -1,5 +1,7 @@
 package com.customanagerapi.service;
 
+import java.util.Optional;
+
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,6 +56,12 @@ public class TipoProdutoService {
 	    Page<TipoProduto> tipos = tipoProdutoRepository.findByEmpresa(emp, pageable);
 	    
 		return tipos;
+	}
+	
+	@Transactional
+	public Optional<TipoProduto> getTipoProdutoById(long id) {						
+		return tipoProdutoRepository.findById(id);
+		
 	}
 	
 	@Transactional

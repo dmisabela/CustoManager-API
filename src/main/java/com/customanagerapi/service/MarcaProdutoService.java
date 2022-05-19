@@ -1,5 +1,7 @@
 package com.customanagerapi.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,6 +55,12 @@ public class MarcaProdutoService {
 	    Page<MarcaProduto> marcas = marcaProdutoRepository.findByEmpresa(emp, pageable);
 	    
 		return marcas;
+	}
+	
+	@Transactional
+	public Optional<MarcaProduto> getMarcaProdutoById(long id) {						
+		return marcaProdutoRepository.findById(id);
+		
 	}
 	
 	@Transactional

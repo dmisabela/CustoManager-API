@@ -1,6 +1,7 @@
 package com.customanagerapi.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,10 @@ public class MovimentacaoService {
 			
 			List<MovimentacaoProduto> mp = movimentacao.getMovimentacaoProdutos();	
 			
-			calcularValorTotalMovimentacao(movimentacao, mp);
-			
+			if (movimentacao.getTipoMovimentacao().toString().equals("VENDA")) {
+				calcularValorTotalMovimentacao(movimentacao, mp);	
+			}
+						
 			movimentacaoRepository.save(movimentacao);	
 
 			for(MovimentacaoProduto m1 : mp) {
@@ -117,6 +120,13 @@ public class MovimentacaoService {
 	    Page<Movimentacao> movimentacao = movimentacaoRepository.findByEmpresa(emp, pageable);
 	    
 		return movimentacao;
+	}
+	
+
+	@Transactional
+	public Optional<Movimentacao> getMovimentacaoById(long id) {						
+		return movimentacaoRepository.findById(id);
+		
 	}
 	
 	

@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.customanagerapi.enums.TipoMovimentacaoEnum;
@@ -46,7 +47,6 @@ public class Movimentacao implements Serializable {
 	protected long id;
 		
 	@Column(name = "valor_total", nullable = false)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Double valorTotal;	
 	
 	@Enumerated(EnumType.STRING)
@@ -55,6 +55,9 @@ public class Movimentacao implements Serializable {
 	
 	@Column (name = "data_movimentacao")
 	private LocalDateTime dataMovimentacao;	
+	
+	@Column(name = "descricao", length = 255)
+	private String descricao;	
 	
 	@Transient
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
