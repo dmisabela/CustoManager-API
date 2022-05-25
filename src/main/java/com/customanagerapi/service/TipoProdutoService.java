@@ -45,17 +45,29 @@ public class TipoProdutoService {
 			String orderBy, 
 			Boolean orderAsc,
 			Integer pageNumber, 
-			Integer pageSize) {
+			Integer pageSize) throws Exception {
 		
-		Empresa emp = empresaRepository.getById(empresaId);
+		try {
+			Empresa emp = empresaRepository.getById(empresaId);
+			
+			
+			Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
+			Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+			
+		    Page<TipoProduto> tipos = tipoProdutoRepository.findByEmpresa(emp, pageable);
+		    
+		    if(tipos.getContent().isEmpty()) {
+		    	throw new Exception("Ocorreu um erro ao obter os tipos de produto. "
+		    			+ "Verifique se a empresa selecionada não possui nenhum tipo cadastrado.");
+		    }  
+		    
+			return tipos;
+			
+		}
+		catch(Exception e) {
+			throw new Exception(e.getMessage());
+		}
 		
-		
-		Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
-		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-		
-	    Page<TipoProduto> tipos = tipoProdutoRepository.findByEmpresa(emp, pageable);
-	    
-		return tipos;
 	}
 	
 	@Transactional

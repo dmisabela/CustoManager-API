@@ -67,7 +67,7 @@ public class VinculoService {
 			vinculo.setEmpresaVinculo(emp);
 			
 			emailService.sendVinculoEmail(
-						vinculo.getUsuarioCriador().getNome(), 
+					    criador.getNome(), 
 						vinculo.getEmpresaVinculo().getNome(), 
 						vinculo.getUsuarioFuncionario().getLogin());
 			

@@ -44,7 +44,9 @@ public class MarcaProdutoService {
 			String orderBy, 
 			Boolean orderAsc,
 			Integer pageNumber, 
-			Integer pageSize) {
+			Integer pageSize) throws Exception {
+		
+		try {
 		
 		Empresa emp = empresaRepository.getById(empresaId);
 		
@@ -54,7 +56,17 @@ public class MarcaProdutoService {
 		
 	    Page<MarcaProduto> marcas = marcaProdutoRepository.findByEmpresa(emp, pageable);
 	    
+	    if(marcas.getContent().isEmpty()) {
+	    	throw new Exception("Ocorreu um erro ao obter as marcas de produto. "
+	    			+ "Verifique se a empresa selecionada não possui nenhuma marca cadastrada.");
+	    }  
+	    
 		return marcas;
+		
+		}
+		catch(Exception e) {
+			throw new Exception(e.getMessage());
+		}
 	}
 	
 	@Transactional
