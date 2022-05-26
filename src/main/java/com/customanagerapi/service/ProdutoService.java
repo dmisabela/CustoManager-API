@@ -185,9 +185,7 @@ public class ProdutoService {
 	}	
 	
 	@Transactional
-	public Produto update(Produto produto)  {	
-		
-		try {
+	public Produto update(Produto produto) throws Exception {	
 			
 			Empresa emp = empresaRepository.getById(produto.getIdEmpresa());
 			produto.setEmpresa(emp);
@@ -200,13 +198,7 @@ public class ProdutoService {
 				produto.setTipoProduto(tp);	
 				produto.setMarcaProduto(mp);
 			}			
-				
-		} 
-		
-		catch (Exception e) {
-				e.getMessage();
-			}
-			
+							
 			return produtoRepository.save(produto);
 	}
 	

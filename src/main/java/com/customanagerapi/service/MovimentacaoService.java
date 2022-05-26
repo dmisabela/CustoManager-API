@@ -58,11 +58,9 @@ public class MovimentacaoService {
 			Associado assoc = associadoRepository.getById(movimentacao.getIdAssociado());
 			movimentacao.setAssociado(assoc);
 			
-			List<MovimentacaoProduto> mp = movimentacao.getMovimentacaoProdutos();					
+			List<MovimentacaoProduto> mp = movimentacao.getMovimentacaoProdutos();				
 				
-			if (movimentacao.getTipoMovimentacao().toString().equals("VENDA")) {
-				calcularValorTotalMovimentacao(movimentacao, mp);	
-			}
+			calcularValorTotalMovimentacao(movimentacao, mp);	
 			
 
 			if(!mp.isEmpty() || !(mp == null)) {

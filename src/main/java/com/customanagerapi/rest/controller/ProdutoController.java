@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.customanagerapi.domain.entity.Produto;
-import com.customanagerapi.domain.utils.SearchRequest;
 import com.customanagerapi.service.ProdutoService;
 
 import io.swagger.annotations.ApiOperation;
@@ -65,7 +64,7 @@ public class ProdutoController {
 	
 	@PostMapping("/search")
 	@ApiOperation("Pesquisar produto(s) por filtros")
-    public Page<Produto> testeFiltro(
+    public Page<Produto> search(
     		Long idEmpresa,
     		String chave,
 			String busca,
