@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.customanagerapi.domain.entity.Movimentacao;
+import com.customanagerapi.domain.entity.Produto;
 import com.customanagerapi.domain.utils.SearchRequest;
 import com.customanagerapi.service.MovimentacaoService;
 
@@ -63,11 +64,17 @@ public class MovimentacaoController {
 		return movimentacaoService.getMovimentacaoById(id);
 	}
 	
-	@PostMapping("/search")
-    @ApiOperation("Pesquisar movimentação(ões) por filtros")
-    public Page<Movimentacao> search(@RequestBody SearchRequest request,
-    					String orderBy, Boolean orderAsc, Integer pageNumber, Integer pageSize ) {
-        return movimentacaoService.searchMovimentacoes(request, orderBy, orderAsc, pageNumber, pageSize);
+	@GetMapping("/search")
+	@ApiOperation("Pesquisar movimentacão por filtros")
+    public Page<Movimentacao> search(
+    		Long idEmpresa,
+    		String chave,
+			String busca,
+			String orderBy, 
+			Boolean orderAsc,
+			Integer pageNumber, 
+			Integer pageSize) throws Exception {
+        return movimentacaoService.search(idEmpresa, chave, busca, orderBy, orderAsc, pageNumber, pageSize);
     }
 	
 	@DeleteMapping("/delete/{id}")

@@ -19,6 +19,7 @@ import com.customanagerapi.domain.entity.MovimentacaoProduto;
 import com.customanagerapi.domain.entity.Produto;
 import com.customanagerapi.domain.utils.SearchRequest;
 import com.customanagerapi.domain.utils.SearchSpecification;
+import com.customanagerapi.enums.TipoMovimentacaoEnum;
 import com.customanagerapi.repository.AssociadoRepository;
 import com.customanagerapi.repository.EmpresaRepository;
 import com.customanagerapi.repository.MovimentacaoRepository;
@@ -159,14 +160,75 @@ public class MovimentacaoService {
 	}
 	
 	
-	public Page<Movimentacao> searchMovimentacoes(SearchRequest request, String orderBy, 
-    		Boolean orderAsc, Integer pageNumber, Integer pageSize) {
-        SearchSpecification<Movimentacao> specification = new SearchSpecification<>(request);
-        Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
+	@Transactional
+	public Page<Movimentacao> search(
+			Long empresaId,
+			String chave,
+			String busca,
+			String orderBy, 
+			Boolean orderAsc,
+			Integer pageNumber, 
+			Integer pageSize) throws Exception {
+		
+		Empresa emp = empresaRepository.getById(empresaId);
+		
+		Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-	        
-        return movimentacaoRepository.findAll(specification, pageable);
-    }
+		
+		Page<Movimentacao> prd = null;
+		
+		switch(chave) {
+		
+		case "id": 
+			long id = Long.parseLong(busca);
+			prd = movimentacaoRepository.findByEmpresaAndId(
+					emp, 
+					id, 
+					pageable);
+			break;
+		
+		case "tipoMovimentacao":			
+			TipoMovimentacaoEnum tipo = busca.equals("VENDA") ? TipoMovimentacaoEnum.VENDA : TipoMovimentacaoEnum.COMPRA;
+			prd = movimentacaoRepository.
+			findByEmpresaAndTipoMovimentacao(
+							emp, 
+							tipo, 
+							pageable); 	
+			break;
+			
+		case "associado":			
+			prd = movimentacaoRepository.
+					findByEmpresaAndAssociado_NomeContainingIgnoreCase(
+							emp, 
+							busca, 
+							pageable);
+			break;	
+			
+		case "descricao":			
+			prd = movimentacaoRepository.
+					findByEmpresaAndDescricaoContainingIgnoreCase(
+							emp, 
+							busca, 
+							pageable);
+			break;	
+			
+		case "valorTotal":
+			Double valor = Double.valueOf(busca);
+			prd = movimentacaoRepository.
+					findByEmpresaAndValorTotal(
+					emp, 
+					valor, 
+					pageable);
+			break;
+			
+		default: 
+			throw new Exception("Chave adicionada inválida.");
+			
+		}
+		
+		return prd;
+	}
+	
 	
 	@Transactional
 	public void delete(Long id) { 

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.customanagerapi.domain.entity.Empresa;
+import com.customanagerapi.domain.entity.Movimentacao;
 import com.customanagerapi.domain.entity.Produto;
 import com.customanagerapi.domain.utils.SearchSpecification;
 
@@ -13,6 +14,9 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>,
 JpaSpecificationExecutor<Produto> {
 
 	Page<Produto> findByEmpresa(Empresa empresa, Pageable pageable);
+	
+	Page<Produto> findByEmpresaAndId(
+			Empresa empresa, long id, Pageable pageable);
 	
 	Page<Produto> findByEmpresaAndIdContainingIgnoreCase(
 			Empresa empresa, long id, Pageable pageable);

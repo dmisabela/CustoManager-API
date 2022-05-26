@@ -62,7 +62,7 @@ public class ProdutoController {
 		return produtoService.update(produto);
 	}
 	
-	@PostMapping("/search")
+	@GetMapping("/search")
 	@ApiOperation("Pesquisar produto(s) por filtros")
     public Page<Produto> search(
     		Long idEmpresa,

@@ -117,6 +117,14 @@ public class ProdutoService {
 		
 		switch(chave) {
 		
+		case "id": 
+			long id = Long.parseLong(busca);
+			prd = produtoRepository.findByEmpresaAndId(
+					emp, 
+					id, 
+					pageable);
+			break;
+		
 		case "nome": 
 			prd = produtoRepository.
 			findByEmpresaAndNomeContainingIgnoreCase(
