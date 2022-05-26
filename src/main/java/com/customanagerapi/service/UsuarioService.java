@@ -1,6 +1,9 @@
 package com.customanagerapi.service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +47,11 @@ public class UsuarioService implements UserDetailsService {
 		if (repository.existsByLogin(usuario.getLogin())) {
 			throw new RegraNegocioException("E-mail já cadastrado");
 		}
+			
+		
+		if(calculaIdade(usuario.getDataNascimento()) < 18) {
+			throw new RegraNegocioException("Idade deve ser maior ou igual a 18!");
+		}
 		
 		String senhaCriptografada = encoder.encode(usuario.getSenha());
 		usuario.setSenha(senhaCriptografada);	
@@ -53,6 +61,26 @@ public class UsuarioService implements UserDetailsService {
 		return repository.save(usuario);
 	}	
 	
+	public static int calculaIdade(LocalDate dataNasc) {
+
+        Calendar dataNascimento = Calendar.getInstance();        
+        dataNascimento.set(dataNasc.getYear(), dataNasc.getMonthValue()-1, dataNasc.getDayOfMonth());
+       
+        Calendar hoje = Calendar.getInstance();
+
+        int idade = hoje.get(Calendar.YEAR) - dataNascimento.get(Calendar.YEAR);
+
+        if (hoje.get(Calendar.MONTH) < dataNascimento.get(Calendar.MONTH)) {
+            idade--;
+        } else {
+            if (hoje.get(Calendar.MONTH) == dataNascimento.get(Calendar.MONTH)
+                    && hoje.get(Calendar.DAY_OF_MONTH) < dataNascimento.get(Calendar.DAY_OF_MONTH)) {
+                idade--;
+            }
+        }
+
+        return idade;
+    }
 	
     public Page<Usuario> searchUsuarios(SearchRequest request, String orderBy, 
     		Boolean orderAsc, Integer pageNumber, Integer pageSize) {
