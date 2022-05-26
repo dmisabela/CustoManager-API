@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,6 +69,11 @@ public class MovimentacaoController {
     					String orderBy, Boolean orderAsc, Integer pageNumber, Integer pageSize ) {
         return movimentacaoService.searchMovimentacoes(request, orderBy, orderAsc, pageNumber, pageSize);
     }
+	
+	@DeleteMapping("/delete/{id}")
+	public void delete(@PathVariable("id") Long id) {
+		movimentacaoService.delete(id);
+	}
 	
 
 }

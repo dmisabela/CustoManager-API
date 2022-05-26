@@ -147,7 +147,14 @@ public class MovimentacaoService {
 
 	@Transactional
 	public Optional<Movimentacao> getMovimentacaoById(long id) {						
-		return movimentacaoRepository.findById(id);
+		Optional<Movimentacao> mov = movimentacaoRepository.findById(id);
+		
+		if(mov.isPresent()) {			
+			Empresa prodEmp = mov.get().getEmpresa();			
+			mov.get().setIdEmpresa(prodEmp.getId());
+		}		
+		
+		return mov;
 		
 	}
 	
@@ -161,6 +168,10 @@ public class MovimentacaoService {
         return movimentacaoRepository.findAll(specification, pageable);
     }
 	
+	@Transactional
+	public void delete(Long id) { 
+		movimentacaoRepository.deleteById(id);
+	}
 	
 	
 

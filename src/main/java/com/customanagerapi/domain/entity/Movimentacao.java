@@ -60,7 +60,6 @@ public class Movimentacao implements Serializable {
 	private String descricao;	
 	
 	@Transient
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private Long idEmpresa;
 	
 	@Transient
