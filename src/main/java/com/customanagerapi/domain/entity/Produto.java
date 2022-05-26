@@ -47,40 +47,36 @@ public class Produto implements Serializable {
 	
 	@Column(name = "valor_unitario", length = 100)
 	@NotNull(message = "{campo.obrigatorio.valor}")
-	private Double valor_unitario;
+	private Double valorUnitario;
 	
 	@Column
 	private Boolean ativo;	
 	
 	@Transient
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private Long idEmpresa;
 	
 	@Transient
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private Long idTipo;
-	
-	@Transient
-	private String nomeTipoProduto;
+	private String nomeEmpresa;
 	
 	@Transient
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private Long idMarca;
+	private Long idTipo;	
 	
 	@Transient
-	private String nomeMarcaProduto;
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private Long idMarca;	
 	
 	@ManyToOne
 	@JoinColumn(name = "id_tipo", nullable = false)
-	@JsonIgnore
+	//@JsonIgnore
 	private TipoProduto tipoProduto;	
 	
 	@ManyToOne
 	@JoinColumn(name = "id_marca", nullable = false)
-	@JsonIgnore
+	//@JsonIgnore
 	private MarcaProduto marcaProduto;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_empresa", nullable = false)
 	@JsonIgnore
 	private Empresa empresa;	

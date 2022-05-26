@@ -1,7 +1,5 @@
 package com.customanagerapi.service;
 
-
-
 import java.util.Optional;
 
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
@@ -17,8 +15,6 @@ import com.customanagerapi.domain.entity.Empresa;
 import com.customanagerapi.domain.entity.MarcaProduto;
 import com.customanagerapi.domain.entity.Produto;
 import com.customanagerapi.domain.entity.TipoProduto;
-import com.customanagerapi.domain.utils.SearchRequest;
-import com.customanagerapi.domain.utils.SearchSpecification;
 import com.customanagerapi.repository.EmpresaRepository;
 import com.customanagerapi.repository.MarcaProdutoRepository;
 import com.customanagerapi.repository.ProdutoRepository;
@@ -92,13 +88,8 @@ public class ProdutoService {
 			Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
 			Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 			
-			Page<Produto> prd = produtoRepository.findByEmpresa(emp, pageable);
-			
-			for (Produto prod : prd.getContent()) {
-				prod.setNomeMarcaProduto(prod.getMarcaProduto().getNome().toString());	
-				prod.setNomeTipoProduto(prod.getTipoProduto().getNome().toString());			
-			}
-			
+			Page<Produto> prd = produtoRepository.findByEmpresa(emp, pageable);			
+						
 			return prd;
 		
 		}
@@ -107,30 +98,91 @@ public class ProdutoService {
 		}
 	} 
 	
-
 	@Transactional
-	public Optional<Produto> getProdutoById(long id) {						
-		return produtoRepository.findById(id);
+	public Page<Produto> searchProdutos(
+			Long empresaId,
+			String chave,
+			String busca,
+			String orderBy, 
+			Boolean orderAsc,
+			Integer pageNumber, 
+			Integer pageSize) throws Exception {
 		
-	}
-	
-	public Page<Produto> searchProdutos(SearchRequest request, String orderBy, 
-    		Boolean orderAsc, Integer pageNumber, Integer pageSize) {
+		Empresa emp = empresaRepository.getById(empresaId);
 		
-        SearchSpecification<Produto> specification = new SearchSpecification<>(request);
-        Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
+		Sort sort = orderAsc ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending();		
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 		
-		Page<Produto> prd = produtoRepository.findAll(specification, pageable);
+		Page<Produto> prd = null;
 		
-		for (Produto prod : prd.getContent()) {
-			prod.setNomeMarcaProduto(prod.getMarcaProduto().getNome().toString());	
-			prod.setNomeTipoProduto(prod.getTipoProduto().getNome().toString());			
+		switch(chave) {
+		
+		case "nome": 
+			prd = produtoRepository.
+			findByEmpresaAndNomeContainingIgnoreCase(
+					emp, 
+					busca, 
+					pageable);
+			break;
+		
+		case "valorUnitario":
+			Double valorUnitario = Double.valueOf(busca);
+			prd = produtoRepository.
+					findByEmpresaAndValorUnitario(
+							emp, 
+							valorUnitario, 
+							pageable); 	
+			break;
+			
+		case "ativo":
+			
+			Boolean status = Boolean.valueOf(busca);
+			prd = produtoRepository.
+					findByEmpresaAndAtivo(
+							emp, 
+							status, 
+							pageable);
+			break;	
+			
+		case "tipoProduto":
+			prd = produtoRepository.
+			findByEmpresaAndTipoProduto_NomeContainingIgnoreCase(
+					emp, 
+					busca, 
+					pageable);
+			break;
+			
+		case "marcaProduto":
+			prd = produtoRepository.
+			findByEmpresaAndMarcaProduto_NomeContainingIgnoreCase(
+					emp, 
+					busca, 
+					pageable);
+			break;
+			
+		default: 
+			throw new Exception("Chave adicionada inválida.");
+			
 		}
-	        
-        return prd;
-    }
+		
+		return prd;
+	}
 	
+
+	@Transactional
+	public Optional<Produto> getProdutoById(long id) {	
+		
+		Optional<Produto> prd = produtoRepository.findById(id);
+		
+		if(prd.isPresent()) {			
+			Empresa prodEmp = prd.get().getEmpresa();			
+			prd.get().setIdEmpresa(prodEmp.getId());
+			prd.get().setNomeEmpresa(prodEmp.getNome());
+		}
+		
+		return prd;
+		
+	}	
 	
 	@Transactional
 	public Produto update(Produto produto)  {	

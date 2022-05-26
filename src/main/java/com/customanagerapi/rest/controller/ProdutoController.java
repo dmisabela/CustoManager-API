@@ -64,13 +64,16 @@ public class ProdutoController {
 	}
 	
 	@PostMapping("/search")
-    @ApiOperation("Pesquisar produto(s) por filtros")
-    public Page<Produto> search(@RequestBody SearchRequest request,
-    					String orderBy, Boolean orderAsc, Integer pageNumber, Integer pageSize ) {
-        return produtoService.searchProdutos(request, orderBy, orderAsc, pageNumber, pageSize);
+	@ApiOperation("Pesquisar produto(s) por filtros")
+    public Page<Produto> testeFiltro(
+    		Long idEmpresa,
+    		String chave,
+			String busca,
+			String orderBy, 
+			Boolean orderAsc,
+			Integer pageNumber, 
+			Integer pageSize) throws Exception {
+        return produtoService.searchProdutos(idEmpresa, chave, busca, orderBy, orderAsc, pageNumber, pageSize);
     }
-	
-	
-	
 
 }

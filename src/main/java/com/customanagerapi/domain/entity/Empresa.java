@@ -84,7 +84,7 @@ public class Empresa implements Serializable {
 	
 	@OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL)
-	@JsonIgnore
+    @JsonIgnore
     private Set<Produto> produto;
 
 	@OneToMany(mappedBy = "empresaAssociado", fetch = FetchType.LAZY,
