@@ -61,7 +61,11 @@ public class VinculoService {
 			
 			if (funcionario == null) {
 				throw new RegraNegocioException("Código de usuário funcionário inválido.");		
-			}		
+			}
+			
+			if(vinculoRepository.findByUsuarioFuncionario(vinculo.getUsuarioFuncionario()) != null) {
+				throw new RegraNegocioException("Funcionário já cadastrado nesta empresa.");		
+			}
 			
 			Empresa emp = empresaRepository.getById(vinculo.getIdEmpresaVinculo());		
 			vinculo.setEmpresaVinculo(emp);

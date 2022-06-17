@@ -6,12 +6,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.customanagerapi.domain.entity.Empresa;
+import com.customanagerapi.domain.entity.Usuario;
 import com.customanagerapi.domain.entity.VinculoUsuarioEmpresa;
 
 public interface VinculoRepository extends JpaRepository<VinculoUsuarioEmpresa, Long>,
 JpaSpecificationExecutor<VinculoUsuarioEmpresa> {
 	
 	List<VinculoUsuarioEmpresa> findByEmpresaVinculo(Empresa empresaVinculo);
+
+
+	List<VinculoUsuarioEmpresa> findByUsuarioFuncionario(Usuario usuarioFuncionario);
 	
 
 

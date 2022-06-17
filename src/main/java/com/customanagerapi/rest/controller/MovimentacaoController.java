@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.customanagerapi.domain.entity.Movimentacao;
-import com.customanagerapi.domain.entity.Produto;
-import com.customanagerapi.domain.utils.SearchRequest;
 import com.customanagerapi.service.MovimentacaoService;
 
 import io.swagger.annotations.ApiOperation;
