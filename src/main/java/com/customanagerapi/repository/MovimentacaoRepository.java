@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.customanagerapi.domain.entity.Empresa;
 import com.customanagerapi.domain.entity.Movimentacao;
-import com.customanagerapi.domain.entity.Produto;
 import com.customanagerapi.domain.utils.SearchSpecification;
 import com.customanagerapi.enums.TipoMovimentacaoEnum;
 
 public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Long>,
 JpaSpecificationExecutor<Movimentacao> {
-
+	
+	long countByEmpresaAndTipoMovimentacao(Empresa empresa, TipoMovimentacaoEnum tipo);
+		
 	Page<Movimentacao> findByEmpresa(Empresa empresa, Pageable pageable);	
 	
 	

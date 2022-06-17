@@ -1,5 +1,6 @@
 package com.customanagerapi.rest.controller;
 
+import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -62,6 +63,12 @@ public class MovimentacaoController {
 	@ApiOperation("Obter detalhes de uma movimentação pelo ID")
 	public Optional<Movimentacao> getMovimentacaoById(@PathVariable("id") long id) {
 		return movimentacaoService.getMovimentacaoById(id);
+	}
+	
+	@GetMapping("/get-quantidade-by-tipo/{empresaId}") 
+	@ApiOperation("Obter quantidade de movimentações por tipo")
+	public Map<String, String> getMovimentacoesByTipo(@PathVariable("empresaId") long empresaId) {
+		return movimentacaoService.getMovimentacoesByTipo(empresaId);
 	}
 	
 	@GetMapping("/search")
