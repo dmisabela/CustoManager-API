@@ -35,9 +35,7 @@ public class EmpresaService {
 	@Transactional
 	public Empresa salvar(Empresa empresa) throws RegraNegocioException {	
 		
-		if(empresaRepository.existsByCnpj(empresa.getCnpj())) {
-			throw new RegraNegocioException("CNPJ já cadastrado");
-		}
+		this.existsByCnpj(empresa);
 				
 		empresa.setDataCriacao(LocalDateTime.now());	
 		
@@ -119,12 +117,45 @@ public class EmpresaService {
 		
 	}
 	
+    public Boolean existsByCnpj(Empresa empresa) {
+		
+		if(empresaRepository.existsById(empresa.getId())) {
+			
+			Empresa actualEmp = empresaRepository.getById(empresa.getId());
+			
+			String oldCnpj = actualEmp.getCnpj();
+			String newCnpj = empresa.getCnpj();
+			
+			if(!newCnpj.equals(oldCnpj) && empresaRepository.existsByCnpj(newCnpj)) {
+				throw new RegraNegocioException("CNPJ já cadastrado");
+			}	
+			else {
+				return false;
+			}
+		}	
+		
+		else {	
+			
+			if(empresaRepository.existsByCnpj(empresa.getCnpj())) {
+				throw new RegraNegocioException("CNPJ já cadastrado");
+			}		
+			else {
+				return false;
+			}
+			
+		}
+		
+	}
+	
 	
 	@Transactional
 	public Empresa update(Empresa empresa) {
 		
+
+		this.existsByCnpj(empresa);
+		
 		Usuario criador = usuarioRepository
-                .findById(empresa.getIdUsuarioCriador());
+                .findById(empresa.getIdUsuarioCriador());		
 		
 		empresa.setUsuario(criador);
 		
