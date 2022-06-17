@@ -1,6 +1,8 @@
 package com.customanagerapi.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
@@ -17,8 +19,6 @@ import com.customanagerapi.domain.entity.Empresa;
 import com.customanagerapi.domain.entity.Movimentacao;
 import com.customanagerapi.domain.entity.MovimentacaoProduto;
 import com.customanagerapi.domain.entity.Produto;
-import com.customanagerapi.domain.utils.SearchRequest;
-import com.customanagerapi.domain.utils.SearchSpecification;
 import com.customanagerapi.enums.TipoMovimentacaoEnum;
 import com.customanagerapi.repository.AssociadoRepository;
 import com.customanagerapi.repository.EmpresaRepository;
@@ -157,6 +157,25 @@ public class MovimentacaoService {
 		
 		return mov;
 		
+	}
+	
+	public Map<String, String> getMovimentacoesByTipo(Long empresaId) {
+		
+		Empresa emp = empresaRepository.getById(empresaId);
+		
+		Long quantVenda = movimentacaoRepository
+				.countByEmpresaAndTipoMovimentacao(emp, TipoMovimentacaoEnum.VENDA);
+		
+		Long quantCompra = movimentacaoRepository
+				.countByEmpresaAndTipoMovimentacao(emp, TipoMovimentacaoEnum.COMPRA);
+		
+		
+		
+	    HashMap<String, String> map = new HashMap<>();
+	    map.put("qt_venda", quantVenda.toString());
+	    map.put("qt_compra", quantCompra.toString());
+	    
+	    return map;
 	}
 	
 	
