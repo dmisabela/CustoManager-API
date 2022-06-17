@@ -1,18 +1,14 @@
 package com.customanagerapi.service;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -38,28 +34,100 @@ public class UsuarioService implements UserDetailsService {
 	private UsuarioRepository repository;
 	
 	@Transactional
-	public Usuario salvar(Usuario usuario) throws RegraNegocioException {	
+	public Usuario salvar(Usuario usuario) throws Exception {	
 		
-		if(repository.existsByCpf(usuario.getCpf())) {
-			throw new RegraNegocioException("CPF já cadastrado");
-		}
-		
-		if (repository.existsByLogin(usuario.getLogin())) {
-			throw new RegraNegocioException("E-mail já cadastrado");
-		}
+		try {
+
+			this.existsByCpf(usuario);
+			this.existsByEmail(usuario);
 			
-		
-		if(calculaIdade(usuario.getDataNascimento()) < 18) {
-			throw new RegraNegocioException("Idade deve ser maior ou igual a 18!");
+			calculaIdade(usuario.getDataNascimento());				
+			
+			String senhaCriptografada = encoder.encode(usuario.getSenha());
+			usuario.setSenha(senhaCriptografada);	
+			usuario.setDataCriacao(LocalDateTime.now());
+			
+			this.formatData(usuario);			
+			
+			return repository.save(usuario);
 		}
 		
-		String senhaCriptografada = encoder.encode(usuario.getSenha());
-		usuario.setSenha(senhaCriptografada);	
-		usuario.setDataCriacao(LocalDateTime.now());
-	
+		catch(Exception e) {
+			throw new Exception("Erro: " + e.getMessage());
+		}
 		
-		return repository.save(usuario);
 	}	
+	
+	public Boolean existsByCpf(Usuario usuario) {
+		
+		if(repository.existsById(usuario.getId())) {
+			
+			Usuario actualUser = repository.findById(usuario.getId());
+			
+			String oldCpf = actualUser.getCpf();
+			String newCpf = usuario.getCpf();
+			
+			if(!newCpf.equals(oldCpf) && repository.existsByCpf(newCpf)) {
+				throw new RegraNegocioException("CPF já cadastrado");
+			}	
+			else {
+				return false;
+			}
+		}	
+		
+		else {	
+			
+			if(repository.existsByCpf(usuario.getCpf())) {
+				throw new RegraNegocioException("CPF já cadastrado");
+			}		
+			else {
+				return false;
+			}
+			
+		}
+		
+	}
+	
+	
+	public Boolean existsByEmail(Usuario usuario) {
+		
+		if(repository.existsById(usuario.getId())) {
+			
+			Usuario actualUser = repository.findById(usuario.getId());
+			
+			String oldEmail = actualUser.getLogin();
+			String newEmail = usuario.getLogin();
+			
+			if(!newEmail.equals(oldEmail) && repository.existsByLogin(newEmail)) {
+				throw new RegraNegocioException("E-mail já cadastrado");
+			}	
+			else {
+				return false;
+			}
+		}	
+		
+		else {	
+			
+			if(repository.existsByLogin(usuario.getLogin())) {
+				throw new RegraNegocioException("E-mail já cadastrado");
+			}		
+			else {
+				return false;
+			}
+			
+		}
+		
+	}
+	
+	
+	public Usuario formatData(Usuario usuario) {
+		
+		usuario.setNome(usuario.getNome().replaceAll("[ ]+", " "));
+		usuario.setEndereco(usuario.getEndereco().replaceAll("[ ]+", " "));
+		
+		return usuario;
+	}
+	
 	
 	public static int calculaIdade(LocalDate dataNasc) {
 
@@ -78,6 +146,11 @@ public class UsuarioService implements UserDetailsService {
                 idade--;
             }
         }
+        
+
+		if(idade < 18 || idade > 120) {
+			throw new RegraNegocioException("Idade deve ser entre 18 e 120!");
+		}
 
         return idade;
     }
@@ -124,8 +197,8 @@ public class UsuarioService implements UserDetailsService {
 	
 	
 	@Transactional
-	public Usuario update(Usuario usuario) {
-		return repository.save(usuario);
+	public Usuario update(Usuario usuario) throws Exception {
+		return this.salvar(usuario);
 	}
 	
 	@Transactional
