@@ -75,6 +75,34 @@ public class UsuarioService implements UserDetailsService {
 		
 	}
 	
+	@Transactional
+	public Usuario changePassword(Usuario usuario, String senhaInformada) throws Exception {	
+		
+		try {
+
+			Usuario actualUser = repository.findById(usuario.getId());			
+			String senhaAntiga = actualUser.getSenha();
+			
+			if(!encoder.matches(senhaInformada, senhaAntiga)) {
+				throw new Exception("Senha antiga informada não coincide com a cadastrada.");
+			}
+			
+			else {
+				
+				String novaSenha = encoder.encode(usuario.getSenha());				
+				usuario.setSenha(novaSenha);	
+				
+				return repository.save(usuario);
+			}	
+			
+		}		
+		catch(Exception e) {
+			throw new Exception("Erro: " + e.getMessage());
+		}
+		
+	}
+	
+	
 	public Boolean existsByCpf(Usuario usuario) {
 		
 		if(repository.existsById(usuario.getId())) {

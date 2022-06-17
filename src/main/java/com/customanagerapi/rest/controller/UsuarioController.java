@@ -63,7 +63,7 @@ public class UsuarioController {
 	@ApiOperation("Cadastro de usuário")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Usuario insertUser(@RequestBody @Valid Usuario usuario) throws Exception {		
-		return usuarioService.salvar(usuario);
+		return usuarioService.cadastrar(usuario);
 	}
 	
 	@GetMapping("/get-all")
@@ -105,6 +105,12 @@ public class UsuarioController {
 	@ApiOperation("Alterar usuário")
 	public Usuario updateUser(@RequestBody @Valid Usuario usuario) throws Exception {
 		return usuarioService.update(usuario);
+	}
+	
+	@PutMapping("/change-password")
+	@ApiOperation("Alterar senha")
+	public Usuario changePassword(@RequestBody @Valid Usuario usuario, String senhaInformada) throws Exception {
+		return usuarioService.changePassword(usuario, senhaInformada);
 	}
 	
 		
