@@ -34,20 +34,18 @@ public class UsuarioService implements UserDetailsService {
 	private UsuarioRepository repository;
 	
 	@Transactional
-	public Usuario salvar(Usuario usuario) throws Exception {	
+	public Usuario cadastrar(Usuario usuario) throws Exception {	
 		
 		try {
 
 			this.existsByCpf(usuario);
-			this.existsByEmail(usuario);
-			
-			calculaIdade(usuario.getDataNascimento());				
+			this.existsByEmail(usuario);			
+			calculaIdade(usuario.getDataNascimento());	
+			this.formatData(usuario);	
 			
 			String senhaCriptografada = encoder.encode(usuario.getSenha());
 			usuario.setSenha(senhaCriptografada);	
 			usuario.setDataCriacao(LocalDateTime.now());
-			
-			this.formatData(usuario);			
 			
 			return repository.save(usuario);
 		}
@@ -57,6 +55,25 @@ public class UsuarioService implements UserDetailsService {
 		}
 		
 	}	
+	
+	@Transactional
+	public Usuario update(Usuario usuario) throws Exception {	
+		
+		try {
+
+			this.existsByCpf(usuario);
+			this.existsByEmail(usuario);			
+			calculaIdade(usuario.getDataNascimento());				
+			this.formatData(usuario);			
+			
+			return repository.save(usuario);
+		}
+		
+		catch(Exception e) {
+			throw new Exception("Erro: " + e.getMessage());
+		}
+		
+	}
 	
 	public Boolean existsByCpf(Usuario usuario) {
 		
@@ -194,13 +211,7 @@ public class UsuarioService implements UserDetailsService {
 		
 		return user;
 	}
-	
-	
-	@Transactional
-	public Usuario update(Usuario usuario) throws Exception {
-		return this.salvar(usuario);
-	}
-	
+		
 	@Transactional
 	public void delete(Long id) { 
 		repository.deleteById(id);
